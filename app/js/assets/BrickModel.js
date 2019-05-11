@@ -1,0 +1,62 @@
+class BrickModel {
+    constructor() {
+        this.model = new THREE.Object3D()
+        console.log("creating class");
+
+        this.loadBrickModel = (path, callback) => {
+            var loader = new THREE.GLTFLoader();
+
+            console.log("loader assign");
+
+            loader.load(path, (gltf) => {
+                console.log(gltf);
+
+                gltf.scene.traverse((child) => {
+                    // console.log(child);
+
+                    if (child.isMesh) {
+                        // console.log(child);
+
+                        // this.model.add(child)
+                        // child.geometry.center(); // center here
+                    }
+
+                });
+
+                var rand = Math.ceil(Math.random() * 6) - 1
+                if (gltf.scene.children.length == 1)
+                    gltf.scene.children[0].material = Specs.matW[rand]
+                else {
+                    gltf.scene.children[0].material = Specs.matC[rand]
+                    // gltf.scene.children[0].material = Specs.matWRed
+                    gltf.scene.children[1].material = Specs.matW[rand]
+                }
+                while (gltf.scene.children.length != 0) {
+                    console.log(gltf.scene.children[0]);
+                    this.model.add(gltf.scene.children[0])
+
+
+                }
+                // for (let i = 0; i < gltf.scene.children.length; i++)
+                //     this.model.add(gltf.scene.children[i])
+                var light = new Light3D()
+                light.scale.set(0.0100, 0.0100, 0.0100)
+                light.position.set(1.5, 1.7, 1.5)
+                this.model.add(light)
+                this.model.scale.set(100, 100, 100) // scale here
+
+
+
+                // scene.add(gltf.scene);
+                // this.model.add(this.mesh)
+
+                callback(this.model)
+                // callback(gltf.scene)
+
+            },
+                (xhr) => xhr,
+                (err) => console.error(err));
+        }
+
+    }
+}

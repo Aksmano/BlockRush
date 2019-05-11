@@ -1,0 +1,29 @@
+{
+  "name": "threetris-3d",
+  "version": "1.0.0",
+  "description": "School final project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/Aksmano/threetris-3d.git"
+  },
+  "keywords": [
+    "threetris"
+  ],
+  "author": "@Aksmano @NM-Amarth @Setel15",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/Aksmano/threetris-3d/issues"
+  },
+  "homepage": "https://gitlab.com/Aksmano/threetris-3d#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "draco3d": "^1.3.4",
+    "nedb": "^1.8.0",
+    "nodemon": "^1.19.0"
+  }
+}

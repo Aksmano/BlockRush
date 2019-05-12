@@ -2,6 +2,7 @@ class Light3D extends THREE.Object3D {
     constructor() {
         super()
         this.init()
+        console.log("Light3D class created")        
     }
 
     init() {
@@ -20,5 +21,6 @@ class Light3D extends THREE.Object3D {
 
         this.octahedron = new THREE.Mesh(Specs.octaGeo, Specs.octaMat)
         this.add(this.octahedron)
+        
     }
 }

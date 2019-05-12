@@ -1,9 +1,9 @@
 class SrvFuncs {
     constructor() {
-
+        console.log("SrvFuncs class created")        
     }
 
-    getIndex(response, fs){
+    getIndex(response, fs) {
         fs.readFile("app/pages/index.html", (error, data) => {
             if (!error) {
                 response.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });
@@ -13,8 +13,8 @@ class SrvFuncs {
         })
     }
 
-    getCubes(response, fs){
-        fs.readFile("app/pages/cubes.html", (error, data) => {
+    getHTMLFile(response, fs, file) {
+        fs.readFile("app/pages/" + file + ".html", (error, data) => {
             if (!error) {
                 response.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });
                 response.write(data);
@@ -24,7 +24,7 @@ class SrvFuncs {
     }
 
     getRest(request, response, fs) {
-        
+
 
         fs.readFile("app/" + decodeURI(request.url), (error, data) => {
             if (!error && decodeURI(request.url).includes(".html")) {
@@ -54,7 +54,7 @@ class SrvFuncs {
                 response.end()
             }
 
-            else if(!error && decodeURI(request.url).includes(".gltf") || decodeURI(request.url).includes(".glb")){
+            else if (!error && decodeURI(request.url).includes(".gltf") || decodeURI(request.url).includes(".glb")) {
                 response.writeHead(200, { 'Content-Type': 'model/gltf-binary;charset=utf-8' })
                 response.write(data)
                 response.end()

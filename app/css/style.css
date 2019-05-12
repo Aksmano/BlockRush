@@ -3,3 +3,9 @@ body{
     overflow: hidden;
     background: black;
 }
+
+h1{
+    position: absolute;
+    display: block;
+    margin-top:50px;
+}

@@ -40,10 +40,10 @@ class BrickModel {
                 // for (let i = 0; i < gltf.scene.children.length; i++)
                 //     this.model.add(gltf.scene.children[i])
                 var light = new Light3D()
-                light.scale.set(0.0100, 0.0100, 0.0100)
-                light.position.set(1.5, 1.7, 1.5)
+                light.scale.set(1 / Specs.scale, 1 / Specs.scale, 1 / Specs.scale)
+                light.position.set(150 / Specs.scale, 170 / Specs.scale, 150 / Specs.scale)
                 this.model.add(light)
-                this.model.scale.set(100, 100, 100) // scale here
+                this.model.scale.set(Specs.scale, Specs.scale, Specs.scale) // scale here
 
 
 

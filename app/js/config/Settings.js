@@ -6,6 +6,8 @@ var Specs = {
         10000 // maksymalna renderowana odległość
     ),
 
+    hemiLight: new THREE.HemisphereLight( 0xffffff, 0x080808, 5 ),
+    radian(degree) { return degree * Math.PI / 180 },
     degrees(degree) { return degree * Math.PI / 180 },
     gridHelper: new THREE.GridHelper(3000, 75),
 
@@ -47,5 +49,12 @@ var Specs = {
     matCGreen: new THREE.MeshStandardMaterial({ color: 0x0a2a00, roughness: 0.7, metalness: 0.8, side: THREE.DoubleSide, wireframe: false, transparent: false, opacity: 1 }),
     matCOrange: new THREE.MeshStandardMaterial({ color: 0x2a1a00, roughness: 0.7, metalness: 0.8, side: THREE.DoubleSide, wireframe: false, transparent: false, opacity: 1 }),
     matCViolet: new THREE.MeshStandardMaterial({ color: 0x2a002a, roughness: 0.7, metalness: 0.8, side: THREE.DoubleSide, wireframe: false, transparent: false, opacity: 1 }),
-    matCBlack: new THREE.MeshStandardMaterial({ color: 0x0f0f0f, roughness: 0.7, metalness: 0.8, side: THREE.DoubleSide, wireframe: false, transparent: false, opacity: 1 })
+    matCBlack: new THREE.MeshStandardMaterial({ color: 0x0f0f0f, roughness: 0.7, metalness: 0.8, side: THREE.DoubleSide, wireframe: false, transparent: false, opacity: 1 }),
+
+    scale: 25,
+    brickDist: {
+        "cosmic_brick": 2.12,
+        "normic_brick": 0,
+        "regular_brick": 0
+    }
 }

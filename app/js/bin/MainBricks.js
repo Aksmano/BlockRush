@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
     // $(document).ready(() => {
+    for (let i = 0; i < document.body.children.length - 1; i++) {
+        document.body.children[i].style.top = 50 * i + "px"
+    }
+
     var scene = new THREE.Scene()
 
     var camera = Specs.camera
@@ -23,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     model1x1.loadBrickModel("../../models/cosmic_brick.gltf", (modeldata) => {
         console.log("model has been loaded", modeldata)
         model1 = modeldata
-        modeldata.position.set(0, 100, 0)
+        modeldata.position.set(0, Specs.scale, 0)
         scene.add(modeldata) // data to obiekt kontenera zwrócony z Model.js
     })
 
@@ -32,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     model1x2.loadBrickModel("../../models/regular_brick.gltf", (modeldata) => {
         console.log("model has been loaded", modeldata)
         model2 = modeldata
-        modeldata.position.set(-300, 100, 0)
+        modeldata.position.set(-3 * Specs.scale, Specs.scale, 0)
         scene.add(modeldata) // data to obiekt kontenera zwrócony z Model.js
     })
 
@@ -41,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     model1x3.loadBrickModel("../../models/normic_brick.gltf", (modeldata) => {
         console.log("model has been loaded", modeldata)
         model3 = modeldata
-        modeldata.position.set(300, 100, 0)
+        modeldata.position.set(3 * Specs.scale, Specs.scale, 0)
         scene.add(modeldata) // data to obiekt kontenera zwrócony z Model.js
     })
 
@@ -50,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
     model1x4.loadBrickModel("../../models/cosmic_brick_empty.gltf", (modeldata) => {
         console.log("model has been loaded", modeldata)
         model4 = modeldata
-        modeldata.position.set(-600, 100, 0)
+        modeldata.position.set(-6 * Specs.scale, Specs.scale, 0)
         scene.add(modeldata) // data to obiekt kontenera zwrócony z Model.js
     })
 
@@ -59,27 +63,27 @@ document.addEventListener("DOMContentLoaded", () => {
     model1x5.loadBrickModel("../../models/cosmic_brick_sharp.gltf", (modeldata) => {
         console.log("model has been loaded", modeldata)
         model5 = modeldata
-        modeldata.position.set(600, 100, 0)
+        modeldata.position.set(6 * Specs.scale, Specs.scale, 0)
         scene.add(modeldata) // data to obiekt kontenera zwrócony z Model.js
     })
 
     var light = new Light3D()
-    light.position.set(-720, 140, 120)
+    light.position.set(-7.2 * Specs.scale, 1.4 * Specs.scale, 1.2 * Specs.scale)
     scene.add(light)
     light = new Light3D()
-    light.position.set(-420, 140, 120)
+    light.position.set(-4.2 * Specs.scale, 1.4 * Specs.scale, 1.2 * Specs.scale)
     scene.add(light)
     light = new Light3D()
-    light.position.set(-120, 140, 120)
+    light.position.set(-1.2 * Specs.scale, 1.4 * Specs.scale, 1.2 * Specs.scale)
     scene.add(light)
     light = new Light3D()
-    light.position.set(180, 140, 120)
+    light.position.set(1.8 * Specs.scale, 1.4 * Specs.scale, 1.2 * Specs.scale)
     scene.add(light)
     light = new Light3D()
-    light.position.set(480, 140, 120)
+    light.position.set(4.8 * Specs.scale, 1.4 * Specs.scale, 1.2 * Specs.scale)
     scene.add(light)
     light = new Light3D()
-    light.position.set(780, 140, 120)
+    light.position.set(7.8 * Specs.scale, 1.4 * Specs.scale, 1.2 * Specs.scale)
     scene.add(light)
 
     renderer.setClearColor(0x000000) // zamiast # jest 0x

@@ -1,12 +1,14 @@
-class Model1x1 {
-    constructor() {
+class Brick {
+    constructor(matIndex) {
+
+        if (matIndex != undefined)
+            matIndex = matIndex
+        else
+            matIndex = Math.ceil(Math.random() * 6) - 1
         this.model = new THREE.Object3D()
-        console.log("creating class");
 
-        this.loadModel1x1 = (path, callback) => {
+        this.loadBrick = (path, callback) => {
             var loader = new THREE.GLTFLoader();
-
-            console.log("loader assign");
 
             loader.load(path, (gltf) => {
                 console.log(gltf);
@@ -23,33 +25,32 @@ class Model1x1 {
 
                 });
                 if (gltf.scene.children.length == 1)
-                    gltf.scene.children[0].material = Specs.matWYellow
+                    gltf.scene.children[0].material = Specs.matW[matIndex]
                 else {
-                    gltf.scene.children[0].material = Specs.matCWhite
-                    // gltf.scene.children[0].material = Specs.matAssetDarkRed
-                    gltf.scene.children[1].material = Specs.matWYellow
+                    gltf.scene.children[0].material = Specs.matC[matIndex]
+                    gltf.scene.children[1].material = Specs.matW[matIndex]
                 }
 
                 while (gltf.scene.children.length != 0) {
-                    console.log(gltf.scene.children[0]);
-
+                    // console.log(gltf.scene.children[0]);
                     this.model.add(gltf.scene.children[0])
                 }
-                // for (let i = 0; i < gltf.scene.children.length; i++)
-                //     this.model.add(gltf.scene.children[i])
 
-                this.model.scale.set(100, 100, 100) // scale here
-
-                // scene.add(gltf.scene);
-                // this.model.add(this.mesh)
+                const animate = () => {
+                    requestAnimationFrame(animate)
+                    this.model.rotation.y += 0.05
+                }
+                // animate()
+                this.model.name = "Brick"
+                this.model.scale.set(Specs.scale, Specs.scale, Specs.scale) // scale here
 
                 callback(this.model)
-                // callback(gltf.scene)
 
             },
                 (xhr) => xhr,
                 (err) => console.error(err));
         }
+        console.log("brick class created");
 
     }
 }

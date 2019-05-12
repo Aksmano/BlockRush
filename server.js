@@ -7,9 +7,11 @@ const PORT = 3000
 
 const getReqRes = (req, res) => {
     if (req.url == "/")
-        Srv.getIndex(res, fs)
+        Srv.getHTMLFile(res, fs, "index")
     else if (req.url == "/cubes")
-        Srv.getCubes(res, fs)
+        Srv.getHTMLFile(res, fs, "cubes")
+    else if (req.url == "/game")
+        Srv.getHTMLFile(res, fs, "game")
     else
         Srv.getRest(req, res, fs)
 }

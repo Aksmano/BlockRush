@@ -5,6 +5,20 @@ var SrvFuncs = require("./app/js/config/SrvFuncs.js")
 var Srv = new SrvFuncs()
 const PORT = 3000
 
+var sessions = []
+
+// #region tetris w 3d konstrukcja tablicy
+// [
+// index y => [ 
+// index z  =>  [x, x, x],
+//              [x, x, x],
+//              [x, x, x],
+//            ], 
+//            [...],
+//            [...]
+// ]
+// #endregion
+
 const getReqRes = (req, res) => {
     if (req.url == "/")
         Srv.getHTMLFile(res, fs, "index")
@@ -12,6 +26,10 @@ const getReqRes = (req, res) => {
         Srv.getHTMLFile(res, fs, "cubes")
     else if (req.url == "/game")
         Srv.getHTMLFile(res, fs, "game")
+    else if (req.url == "/tetris2d")
+        Srv.getHTMLFile(res, fs, "tetris2d")
+    else if (req.url == "/preset")
+        Srv.getHTMLFile(res, fs, "preset")
     else
         Srv.getRest(req, res, fs)
 }

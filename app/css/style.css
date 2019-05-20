@@ -2,9 +2,10 @@ body{
     margin: 0;
     overflow: hidden;
     background: black;
+    color:white
 }
 
-h1{
+h1, select{
     position: absolute;
     display: block;
     margin-top:50px;

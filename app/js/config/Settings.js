@@ -5,8 +5,17 @@ var Specs = {
         0.1, // minimalna renderowana odległość
         10000 // maksymalna renderowana odległość
     ),
+    orthoCamera: new THREE.OrthographicCamera(
+        window.innerWidth / - 2,
+        window.innerWidth / 2,
+        window.innerHeight / 2,
+        window.innerHeight / - 2,
+        0.1,
+        10000),
 
-    hemiLight: new THREE.HemisphereLight( 0xffffff, 0x080808, 5 ),
+    hemiLight: new THREE.HemisphereLight(0xffffff, 0x080808, 5),
+    ambientLight: new THREE.AmbientLight(0xffffff, 5),
+
     radian(degree) { return degree * Math.PI / 180 },
     degrees(degree) { return degree * Math.PI / 180 },
     gridHelper: new THREE.GridHelper(3000, 75),
@@ -51,10 +60,72 @@ var Specs = {
     matCViolet: new THREE.MeshStandardMaterial({ color: 0x2a002a, roughness: 0.7, metalness: 0.8, side: THREE.DoubleSide, wireframe: false, transparent: false, opacity: 1 }),
     matCBlack: new THREE.MeshStandardMaterial({ color: 0x0f0f0f, roughness: 0.7, metalness: 0.8, side: THREE.DoubleSide, wireframe: false, transparent: false, opacity: 1 }),
 
-    scale: 25,
+    scale: 20,
+    gameSpeed: 15,
     brickDist: {
         "cosmic_brick": 2.12,
-        "normic_brick": 0,
-        "regular_brick": 0
-    }
+        "normic_brick": 1.99,
+        "regular_brick": 2.17
+    },
+
+    tetris2D: // array
+        [
+            [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
+        ],
+
+    tetris3DPart: // array
+        [
+            [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
+        ],
+
+    tetris3DTopBot: // array
+        [
+            [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+            [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+            [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+            [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+            [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+            [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+            [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+            [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+            [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+            [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+            [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+            [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
+        ]
+
+
+
 }

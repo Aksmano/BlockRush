@@ -13,12 +13,13 @@
     <script src="../lib/GLTFLoader.js"></script>
     <script src="../js/config/SrvFuncs.js"></script>
     <script src="../js/config/Settings.js"></script>
-    <script src="../js/config/Tetrinimos.js"></script>
-    <script src="../js/config/Game.js"></script>
+    <script src="../js/config/Tetrinimos2D.js"></script>
+    <script src="../js/config/Tetrinimos3D.js"></script>
+    <script src="../js/config/BlocksPreset.js"></script>
     <script src="../js/bin/MainGame.js"></script>
     <script src="../js/assets/BrickPreset.js"></script>
     <script src="../js/assets/Brick.js"></script>
-    <!-- <script src="../js/assets/Light.js"></script> -->
+    <script src="../js/assets/Light.js"></script>
 
     <title>Game</title>
 </head>
@@ -26,6 +27,24 @@
 <body>
     <h1><a href="cubes">cubes</a></h1>
     <h1><a href="/">menu</a></h1>
+    <select name="tet2d" id="tet2d">
+        <option value="I">I</option>
+        <option value="T">T</option>
+        <option value="O">O</option>
+        <option value="L">L</option>
+        <option value="J">J</option>
+        <option value="S">S</option>
+        <option value="Z">Z</option>
+    </select>
+    <select name="tet3d" id="tet3d" >
+        <option value="I">I</option>
+        <option value="T">T</option>
+        <option value="O">O</option>
+        <option value="L">L</option>
+        <option value="J">J</option>
+        <option value="S">S</option>
+        <option value="Z">Z</option>
+    </select>
     <div id="root"></div>
 </body>
 

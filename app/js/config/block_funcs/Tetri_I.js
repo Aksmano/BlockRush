@@ -6,6 +6,8 @@ class Tetri_I {
     positionVert(board, model) {
         var cont = 0
         var tail = true
+        console.log(model.children[0].getWorldPosition());
+        
         for (let i = board.length - 2; i > 0; i--) {
             for (let j = 0; j < board[i].length; j++) {
                 // console.log("here")
@@ -86,12 +88,17 @@ class Tetri_I {
         for (let i = board.length - 2; i > 0; i--) {
             for (let j = 0; j < board[i].length; j++) {
                 if (board[i][j] == 1) {
-                    // if ((board[i - 2][j - 1] == 2 || board[i - 2][j - 1] == 9)
-                    //     && (board[i - 2][j + 2] == 2 || board[i - 2][j + 2] == 9 || board[i - 2][j + 1] == 2 || board[i - 2][j + 1] == 9)) {
-                    //         return [board, false]
-                    // }
-                    // console.log("ssssss");
-                    
+                    if ((board[i - 2][j - 1] == 2 || board[i - 2][j - 1] == 9
+                        || board[i - 2][j - 2] == 2 || board[i - 2][j - 2] == 9
+                        || board[i - 2][j - 3] == 2 || board[i - 2][j - 3] == 9)
+                        && (board[i - 2][j + 1] == 2 || board[i - 2][j + 1] == 9
+                            || board[i - 2][j + 2] == 2 || board[i - 2][j + 2] == 9
+                            || board[i - 2][j + 3] == 2 || board[i - 2][j + 3] == 9)) {
+                        console.log("inside");
+
+                        return [board, false]
+                    }
+                    console.log("ssssss");
                     board[i][j] = 0
                     board[i - 1][j] = 0
                     board[i - 3][j] = 0
@@ -158,9 +165,10 @@ class Tetri_I {
         for (let i = board.length - 2; i > 0; i--) {
             for (let j = 0; j < board[i].length; j++) {
                 if (board[i][j] == 1) {
-                    if (board[i][j + side] == 9) {
-                        flag = true
-                        break
+                    if (board[i][j + side] == 9 || board[i][j + side] == 2) {
+                        return [board, false]
+                        // flag = true
+                        // break
                     }
                     else {
                         board[i][j + side] = 1
@@ -179,16 +187,17 @@ class Tetri_I {
             if (flag)
                 break
         }
-        return board
+        return [board, true]
     }
     moveToSideHoriz(board, side) {
         var flag = false
         for (let i = board.length - 2; i > 0; i--) {
             for (let j = 0; j < board[i].length; j++) {
                 if (board[i][j] == 1) {
-                    if (board[i][j + side] == 9 && side == -1 || board[i][j + 3 + side] == 9 && side == 1) {
-                        flag = true
-                        break
+                    if ((board[i][j + side] == 9 || board[i][j + side] == 2) && side == -1 || (board[i][j + 3 + side] == 9 || board[i][j + 3 + side] == 2) && side == 1) {
+                        return [board, false]
+                        // flag = true
+                        // break
                     }
                     else {
                         if (side == -1) {
@@ -207,6 +216,6 @@ class Tetri_I {
             if (flag)
                 break
         }
-        return board
+        return [board, true]
     }
 }

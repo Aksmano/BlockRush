@@ -64,7 +64,7 @@ var Specs = {
     gameSpeed: 15,
     brickDist: {
         "cosmic_brick": 2.12,
-        "normic_brick": 1.99,
+        "normic_brick": 2,
         "regular_brick": 2.17
     },
 

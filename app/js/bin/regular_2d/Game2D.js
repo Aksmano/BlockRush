@@ -9,6 +9,8 @@ class Tetris2D {
         this.Models = new Tetrinimos2D(this.brickType)
         this.camera = Specs.orthoCamera
         this.heightControl = 0
+        this.blocksPosition = []
+        this.isOk = 0
 
         this.rotI = 0
 
@@ -28,10 +30,16 @@ class Tetris2D {
                     if (this.board[i][1] == 1)
                         flag = false
                 if (this.heightControl == 1)
-                    if (this.rotI == 1)
-                        this.board = this.Tetri_I.moveToSideHoriz(this.board, -1)
-                    else if (this.rotI == 0)
-                        this.board = this.Tetri_I.moveToSideVert(this.board, -1)
+                    if (this.rotI == 1) {
+                        var arr = this.Tetri_I.moveToSideHoriz(this.board, -1)
+                        this.board = arr[0]
+                        flag = arr[1]
+                    }
+                    else if (this.rotI == 0) {
+                        var arr = this.Tetri_I.moveToSideVert(this.board, -1)
+                        this.board = arr[0]
+                        flag = arr[1]
+                    }
                 if (flag)
                     this.model.position.x -= Specs.brickDist[this.brickType] * Specs.scale
             }
@@ -43,22 +51,73 @@ class Tetris2D {
                     if (this.board[i][10] == 1)
                         flag = false
                 if (this.heightControl == 1)
-                    if (this.rotI == 1)
-                        this.board = this.Tetri_I.moveToSideHoriz(this.board, 1)
-                    else if (this.rotI == 0)
-                        this.board = this.Tetri_I.moveToSideVert(this.board, 1)
+                    if (this.rotI == 1) {
+                        var arr = this.Tetri_I.moveToSideHoriz(this.board, 1)
+                        this.board = arr[0]
+                        flag = arr[1]
+                    }
+                    else if (this.rotI == 0) {
+                        var arr = this.Tetri_I.moveToSideVert(this.board, 1)
+                        this.board = arr[0]
+                        flag = arr[1]
+                    }
                 if (flag)
                     this.model.position.x += Specs.brickDist[this.brickType] * Specs.scale
             }
+
+
+            // dół
             else if (e.keyCode == 40) {
                 if ([2, 4, 5, 6, 7].includes(this.heightControl))
                     this.model.position.y = Specs.brickDist[this.brickType] * Specs.scale * 1.5
 
-                else if (this.heightControl == 1)
-                    this.model.position.y = Specs.brickDist[this.brickType] * Specs.scale * 2
+                else if (this.heightControl == 1) {
+                    if (this.rotI == 0) {
+                        for (let i = this.board.length - 2; i > 0; i--) {
+                            if (this.model != null)
+                                this.model.position.y -= Specs.brickDist[this.brickType] * Specs.scale
+                            var arr = this.Tetri_I.positionVert(this.board, this.model)
+                            this.board = arr[0]
+                            this.model = arr[1]
+                            if (this.model == null) {
+                                break
+                            }
+                        }
+                        for (let i = 1; i < 21; i++)
+                            if (this.board[i].includes(1)) {
+                                cont = false
+                            }
+                    }
+                    else if (this.rotI == 1) {
+                        for (let i = this.board.length - 2; i > 0; i--) {
+                            if (this.model != null)
+                                this.model.position.y -= Specs.brickDist[this.brickType] * Specs.scale
+                            var arr = this.Tetri_I.positionHoriz(this.board, this.model)
+                            this.board = arr[0]
+                            this.model = arr[1]
+                            if (this.model == null) {
+                                this.rotI = 0
+                                break
+                            }
+                        }
 
+
+                        // for (let j = 1; i < this.board[i].length - 1; j++) {
+                        //     if (this.board[i][j] == 1) {
+                        //         if (this.board[i + 1][j] == 9 || this.board[i + 1][j] == 2) {
+                        //             flag = true
+                        //         }
+                        //     }
+                        // }
+                        // if (flag)
+                        //     break
+
+                    }
+                }
                 else if (this.heightControl == 3)
                     this.model.position.y = Specs.brickDist[this.brickType] * Specs.scale
+
+
             }
 
             // rotacja obiektu pod "r"
@@ -74,10 +133,13 @@ class Tetris2D {
                         var arr = this.Tetri_I.rotateToHoriz(this.board)
                         this.board = arr[0]
                         var flag = arr[1]
+
+                        // sprawdzanie kolizjii w srodku
                         if (!flag) {
                             this.model.rotation.z -= Math.PI / 2
                             this.model.position.y -= Specs.brickDist[this.brickType] * Specs.scale * 0.5
                             this.model.position.x -= Specs.brickDist[this.brickType] * Specs.scale * 0.5
+                            this.rotI = 0
                         }
                         for (let i = 0; i < 21; i++) {
                             if (this.board[i][1] == 1)
@@ -152,29 +214,30 @@ class Tetris2D {
                     if (this.model.position.y < Specs.brickDist[this.brickType] * Specs.scale * 2 && this.rotI == 0)
                         this.model.position.y = Specs.brickDist[this.brickType] * Specs.scale * 2
                 }
-
+                this.isOk = 0
                 // zmiana numerkow w tablicy
-                if (this.model != undefined || this.model != null)
+                if (this.model != undefined || this.model != null) {
                     switch (this.model.name[5]) {
-                        case "I":
-                            if (this.rotI == 0) {
-                                var arr = this.Tetri_I.positionVert(this.board, this.model)
-                                this.board = arr[0]
-                                this.model = arr[1]
-                                if (this.model == null)
-                                    this.rotI = 0
-                                console.log(JSON.stringify(this.board, "/n", ""))
-                            }
-                            else if (this.rotI == 1) {
-                                var arr = this.Tetri_I.positionHoriz(this.board, this.model)
-                                this.board = arr[0]
-                                this.model = arr[1]
-                                if (this.model == null)
-                                    this.rotI = 0
-                                console.log(JSON.stringify(this.board, "/n", ""))
-                            }
-                            break
-                    }
+                            case "I":
+                                if (this.rotI == 0) {
+                                    var arr = this.Tetri_I.positionVert(this.board, this.model)
+                                    this.board = arr[0]
+                                    this.model = arr[1]
+                                    if (this.model == null)
+                                        this.rotI = 0
+                                    console.log(JSON.stringify(this.board, "/n", ""))
+                                }
+                                else if (this.rotI == 1) {
+                                    var arr = this.Tetri_I.positionHoriz(this.board, this.model)
+                                    this.board = arr[0]
+                                    this.model = arr[1]
+                                    if (this.model == null)
+                                        this.rotI = 0
+                                    console.log(JSON.stringify(this.board, "/n", ""))
+                                }
+                                break
+                        }
+                }
 
                 // wybór modelu na podstawie randa
                 if (this.model == null) {

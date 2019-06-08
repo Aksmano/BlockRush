@@ -30,6 +30,10 @@ const getReqRes = (req, res) => {
         Srv.getHTMLFile(res, fs, "tetris2d")
     else if (req.url == "/preset")
         Srv.getHTMLFile(res, fs, "preset")
+    else if (req.url == "/game1")
+        Srv.getHTMLFile(res, fs, "game1")
+    else if (req.url == "/br")
+        Srv.getHTMLFile(res, fs, "block_rush")
     else
         Srv.getRest(req, res, fs)
 }

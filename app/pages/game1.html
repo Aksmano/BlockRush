@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            overflow: hidden;
+        }
+    </style>
+    <script src="../lib/jquery331.js"></script>
+    <script src="../lib/three_ver97.js"></script>
+    <script src="../lib/OrbitControls.js"></script>
+    <script src="../lib/GLTFLoader.js"></script>
+    <script src="../js/config/Settings.js"></script>
+    <script src="../js/assets/Brick.js"></script>
+    <script src="../js/config/Tetrinimos2D.js"></script>
+    <script src="../js/config/game_config/box.js"></script>
+    <script src="../js/config/game_config/block.js"></script>
+    <script>
+        $(document).ready(() => {
+            var scene = new THREE.Scene();
+            var camera = Specs.camera
+            var renderer = new THREE.WebGLRenderer();
+            renderer.setClearColor(0xaaaaaa);
+            renderer.setSize($(window).innerWidth(), $(window).innerHeight());
+            $("#root").append(renderer.domElement);
+            camera.position.set(50, 200, 50)
+            camera.lookAt(scene.position)
+            var orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
+            orbitControl.addEventListener('change', function () {
+                renderer.render(scene, camera)
+            });
+            var raycasterC = new THREE.Raycaster();
+            var floor = [];
+            var Marek = new Box()
+            Marek.position.y = 0
+            Marek.rotation.x = Math.PI / 2
+            scene.add(Marek)
+            floor.push(Marek.wall)
+            var animate = null
+            var skyfall = 0
+            // var geometry = new THREE.BoxGeometry(10, 10, 10);
+            // var turbo = 0
+            // geometry.translate(0, 10, 0)
+            var wall = new Block()
+            // wall.geometry.translate(0, 10, 0)
+            scene.add(wall)
+            function falling() {
+                skyfall = 0
+                // $(document).on("keydown", (event) => {
+                //     console.log(event.keyCode)
+                //     switch (event.keyCode) {
+                //         case 87:
+                //             wall.position.y += 10
+                //             break;
+                //         case 65:
+                //             wall.position.x -= 10
+                //             break
+                //         case 68:
+                //             wall.position.x += 10
+                //             break
+                //         case 83:
+                //             wall.position.y -= 10
+                //             break
+                //         case 32:
+                //             meshModel.position.y += 40
+                //             break
+                //     }
+                // })
+                // turbo++
+                // cancelAnimationFrame(animate)
+                // console.log(wall.position)
+                // wall.geometry.translate(0, -10, 0)
+                wall = new Block()
+                // wall.geometry.translate(0, 10, 0)
+                scene.add(wall)
+
+                // animate = requestAnimationFrame(render);
+            }
+            // falling()
+            // console.log(wall.geometry.boundingSphere)
+            var check = 0
+            function render() {
+                var ray = new THREE.Ray(wall.position, wall.getWorldDirection(new THREE.Vector3(1, 1, 1)))
+                raycasterC.ray = ray
+
+                var intersects = raycasterC.intersectObjects(floor, true);
+                if (intersects[0]) {
+                    if (check < 10) {
+                        console.log(intersects[0]);
+                        console.log(intersects[0].point) // współrzędne vertexa na wprost
+                        console.log(intersects[0].distance) // odległość od vertex-a na wprost, zgodnie z kierunkiem ruchu
+                        check++
+                    }
+                    // cancelAnimationFrame(animate)
+
+                    if (Math.round(intersects[0].distance) == 0) {
+                        floor.push(wall)
+                        falling()
+                    } else {
+                        wall.position.z -= skyfall
+                    }
+                    // wall.geometry.normalize()
+                    // wall.position.y = wall.position.y
+
+                    // wall.geometry.translate(0, -10, 0)
+                    // falling()
+                    //stopAnimationFrame(render)
+                } else {
+                    wall.position.z -= skyfall
+                    // console.log(turbo);
+
+                }
+                animate = requestAnimationFrame(render);
+                renderer.render(scene, camera);
+            }
+            render();
+            $("#start").on("click", () => {
+                skyfall = 1
+            })
+        })
+    </script>
+</head>
+
+<body>
+    <button id="start">FALL</button>
+    <div id="root"></div>
+</body>
+
+</html>

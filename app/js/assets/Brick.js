@@ -27,7 +27,7 @@ class Brick {
                 if (gltf.scene.children.length == 1)
                     gltf.scene.children[0].material = Specs.matW[matIndex]
                 else {
-                    gltf.scene.children[0].material = Specs.matC[matIndex]
+                    gltf.scene.children[0].material = Specs.matCDark
                     gltf.scene.children[1].material = Specs.matW[matIndex]
                 }
 
@@ -42,7 +42,7 @@ class Brick {
                 }
                 // animate()
                 this.model.name = "Brick"
-                this.model.scale.set(Specs.scale, Specs.scale, Specs.scale) // scale here
+                this.model.scale.set(Specs.scale - 12, Specs.scale - 12, Specs.scale - 12) // scale here
 
                 callback(this.model)
 

@@ -68,6 +68,9 @@ var Specs = {
     scale: 50,
     sizeYxX: (9 * 9) + 3,
     gameSpeed: 15,
+    swapSpeed: 4.75,
+    fadingSpeed: 4.75,
+    fallingSpeed: 10,
     brickDist: {
         "cosmic_brick": 2.12,
         "normic_brick": 2,

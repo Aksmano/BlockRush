@@ -18,13 +18,23 @@ class GameBR {
         this.nextDirectionVect = null
 
         this.pointedBlockModel = null
+
+        this.indexesMatchedHorizontal = []
+        this.blocksToDestruction = []
+        this.fallingBlocks = []
+        this.blocksToInsert = []
+
+        this.fallCounter = 0
+
         this.isBlockClicked = false
         this.isSwapRendering = false
         this.isSwapPossible = false
+        this.isLineMatchChecked = false
         this.isSwapped = 0
+        this.isLineMatched = false
 
-        var axes = new THREE.AxesHelper(100)
-        this.scene.add(axes)
+        // var axes = new THREE.AxesHelper(100)
+        // this.scene.add(axes)
 
         // var grid = Specs.gridHelper
         // this.scene.add(grid)
@@ -47,8 +57,8 @@ class GameBR {
                     var rand = Math.ceil(Math.random() * 6) - 1
                     this.BRBoard[10 - j][i - 1] = rand
                     model.children[1].material = Specs.matW[rand]
-                    model.name = rand.toString()
-                    model.position.set(Specs.scale * 2 * (i - 1), Specs.scale * 2 * (j - 1), rand * Specs.scale / 10)
+                    model.name = "Brick" + rand.toString()
+                    model.position.set(Specs.scale * 2 * (i - 1), Specs.scale * 2 * (j - 1), 0)
                     this.scene.add(model)
                 }
             console.log(JSON.stringify(this.BRBoard, null, ""));
@@ -76,6 +86,87 @@ class GameBR {
         this.camera.updateProjectionMatrix()
         console.log(this.scene);
 
+        const insertingBlocks = () => {
+            for (let i = 1; i < 9; i++)
+                for (let j = 0; j < 9; j++)
+                    if (!this.getBlockByPosition(j, 9 - i)) {
+                        var model = this.Brick.clone()
+                        model.children[1].material = Specs.matW[this.BRBoard[9 - i][j]]
+                        model.name = "Brick" + this.BRBoard[9 - i][j].toString()
+                        model.position.set(Specs.scale * 2 * j, Specs.scale * 2 * i, 0)
+                        model.scale.set(0, 0, 0)
+                        this.scene.add(model)
+                        this.blocksToInsert.push(model)
+                    }
+            console.log(this.blocksToInsert);
+
+            const insertNewBlock = () => {
+                var request = requestAnimationFrame(insertNewBlock)
+                var scale = null
+                for (let i = 0; i < this.blocksToInsert.length; i++) {
+                    scale = this.blocksToInsert[i].scale
+                    this.blocksToInsert[i].scale.set(scale.x + Specs.fadingSpeed, scale.y + Specs.fadingSpeed, scale.z + Specs.fadingSpeed)
+                }
+                if (scale.x == Specs.scale - 12 && scale.y == Specs.scale - 12 && scale.z == Specs.scale - 12) {
+                    cancelAnimationFrame(request)
+                    this.blocksToInsert = []
+                    document.addEventListener("mousemove", this.cursorMove)
+                    document.addEventListener("click", this.leftClick)
+                    document.addEventListener("contextmenu", this.rightClick)
+                    this.isSwapPossible = false
+                    this.isSwapped = 0
+                    this.currentBlockModel = null
+                    this.nextBlockModel = null
+                    this.isLineMatchChecked = false
+                    this.isLineMatched = false
+                    this.indexesMatchedHorizontal = []
+                    console.log(this.blocksToDestruction);
+                    console.log(this.blocksToInsert);
+                    console.log(this.fallingBlocks);
+                    for (let i = 2; i < this.scene.children.length; i++)
+                        if (![0, 1, 2, 3, 4, 5, 6, 7, 8].includes(this.scene.children[i].position.x / (Specs.scale * 2))
+                            || ![0, 1, 2, 3, 4, 5, 6, 7, 8].includes(this.scene.children[i].position.y / (Specs.scale * 2))
+                            || ![0, 1, 2, 3, 4, 5, 6, 7, 8].includes(this.scene.children[i].position.z / (Specs.scale * 2)))
+                                console.log(this.scene.children[i], this.scene.children[i].position.x / (Specs.scale * 2), this.scene.children[i].position.y / (Specs.scale * 2), this.scene.children[i].position.z / (Specs.scale * 2));
+                                
+                }
+            }
+            insertNewBlock()
+        }
+
+        const blockFalling = () => {
+            var request = requestAnimationFrame(blockFalling)
+            var positionY = null
+            for (let i = 0; i < this.fallingBlocks.length; i++) {
+                positionY = this.fallingBlocks[i].position.y
+                this.fallingBlocks[i].position.y = positionY - Specs.fallingSpeed
+            }
+            this.fallCounter += Specs.fallingSpeed
+            if (this.fallCounter == Specs.scale * 2) {
+                cancelAnimationFrame(request)
+                this.fallCounter = 0
+                this.fallingBlocks = []
+                insertingBlocks()
+            }
+        }
+
+        const scaleBlockSmaller = () => {
+            var request = requestAnimationFrame(scaleBlockSmaller)
+            var scale = null
+            for (let i = 0; i < this.blocksToDestruction.length; i++) {
+                scale = this.blocksToDestruction[i].scale
+                this.blocksToDestruction[i].scale.set(scale.x - Specs.fadingSpeed, scale.y - Specs.fadingSpeed, scale.z - Specs.fadingSpeed)
+                console.log(scale)
+            }
+            if (scale.x == 0 && scale.y == 0 && scale.z == 0) {
+                for (let i = 0; i < this.blocksToDestruction.length; i++)
+                    this.scene.remove(this.blocksToDestruction[i])
+                cancelAnimationFrame(request)
+                this.blocksToDestruction = []
+                blockFalling()
+            }
+        }
+
 
 
         const render = () => {
@@ -88,36 +179,124 @@ class GameBR {
             if (this.isSwapPossible) {
                 // console.log(this.currentBlockClicked);
                 // console.log(this.nextBlockClicked);
+                if (this.isSwapped < 2) {
+                    if (this.currentBlockModel.position.clone().distanceTo(this.nextBlockClicked) > Specs.swapSpeed)
+                        this.currentBlockModel.translateOnAxis(this.currentDirectionVect, Specs.swapSpeed)
 
-                if (this.currentBlockModel.position.clone().distanceTo(this.nextBlockClicked) > 3) {
-                    this.currentBlockModel.translateOnAxis(this.currentDirectionVect, 3)
-                }
-                else {
-                    this.isSwapped++
-                    this.currentBlockModel.position.set(this.nextBlockClicked.x, this.nextBlockClicked.y, this.nextBlockClicked.z)
-                }
+                    else {
+                        this.isSwapped++
+                        this.currentBlockModel.position.set(this.nextBlockClicked.x, this.nextBlockClicked.y, 0)
+                    }
 
-                if (this.nextBlockModel.position.clone().distanceTo(this.currentBlockClicked) > 3) {
-                    this.nextBlockModel.translateOnAxis(this.nextDirectionVect, 3)
-                }
-                else {
-                    this.isSwapped++
-                    this.nextBlockModel.position.set(this.currentBlockClicked.x, this.currentBlockClicked.y, this.currentBlockClicked.z)
+                    if (this.nextBlockModel.position.clone().distanceTo(this.currentBlockClicked) > Specs.swapSpeed)
+                        this.nextBlockModel.translateOnAxis(this.nextDirectionVect, Specs.swapSpeed)
+
+                    else {
+                        this.isSwapped++
+                        this.nextBlockModel.position.set(this.currentBlockClicked.x, this.currentBlockClicked.y, 0)
+                    }
                 }
 
                 if (this.isSwapped == 2) {
-                    this.isSwapPossible = false
-                    this.isSwapped = 0
-                    this.currentBlockModel = null
-                    this.nextBlockModel = null
-                    document.addEventListener("mousemove", this.cursorMove)
-                    document.addEventListener("click", this.leftClick)
-                    document.addEventListener("contextmenu", this.rightClick)
-                    for (let i = 9; i > 0; i--)
-                        this.BRBoard = this.LineCheck.checkHoriz(this.BRBoard, i)
+                    var indexes = []
+                    var prevLine = null
+
+                    for (let i = 9; i > 0; i--) {
+                        prevLine = JSON.stringify(this.BRBoard[i], null, "")
+                        this.BRBoard, indexes = this.LineCheck.checkHoriz(this.BRBoard, i)
+                        // console.log(prevLine)
+                        // console.log(JSON.stringify(this.BRBoard[i], null, ""));
+                        console.log(this.isLineMatched, "before")
+                        if (prevLine != JSON.stringify(this.BRBoard[i], null, ""))
+                            this.isLineMatched = true
+                        console.log(indexes)
+                        console.log(this.isLineMatched, "after")
+
+                        if (this.isLineMatched) {
+                            this.isSwapPossible = false
+                            this.isSwapped = 0
+                            this.currentBlockModel = null
+                            this.nextBlockModel = null
+                            console.log("in isLineMatched")
+
+                            for (let j = 0; j < indexes.length; j++)
+                                for (let k = 0; k < indexes[j].length; k++)
+                                    this.indexesMatchedHorizontal.push(indexes[j][k])
+                            console.log(this.indexesMatchedHorizontal);
+
+                            var index = 0
+                            console.log(i);
+                            while (index < this.indexesMatchedHorizontal.length) {
+                                for (let k = 0; k < indexes.length; k++)
+                                    for (let j = 2; j < this.scene.children.length; j++) {
+                                        if ((Math.round(9 - this.scene.children[j].position.y / (Specs.scale * 2)) == i)
+                                            && Math.round(this.scene.children[j].position.x / (Specs.scale * 2)) == this.indexesMatchedHorizontal[index]) {
+                                            index++
+                                            this.blocksToDestruction.push(this.scene.children[j])
+                                            if (index == indexes[k].length)
+                                                break
+
+                                        }
+                                    }
+                            }
+                            console.log(this.blocksToDestruction)
+                            for (let j = i - 1; j > 0; j--)
+                                for (let k = 0; k < this.indexesMatchedHorizontal.length; k++) {
+                                    this.fallingBlocks.push(this.getBlockByPosition(this.indexesMatchedHorizontal[k], j))
+                                }
+
+                            console.log(this.fallingBlocks);
+                            document.removeEventListener("click", this.leftClick)
+                            document.removeEventListener("mousemove", this.cursorMove)
+                            document.removeEventListener("contextmenu", this.rightClick)
+                            scaleBlockSmaller()
+                            // blockFalling()
+                            break
+                        }
+
+                        else
+                            this.isLineMatchChecked = true
+
+                    }
+
+                    if (this.isLineMatchChecked) {
+                        console.log("heherere");
+
+                        if (this.currentBlockModel.position.clone().distanceTo(this.currentBlockClicked) > Specs.swapSpeed)
+                            this.currentBlockModel.translateOnAxis(this.nextDirectionVect, Specs.swapSpeed)
+
+                        if (this.nextBlockModel.position.clone().distanceTo(this.nextBlockClicked) > Specs.swapSpeed)
+                            this.nextBlockModel.translateOnAxis(this.currentDirectionVect, Specs.swapSpeed)
+
+                        if (this.nextBlockModel.position.clone().distanceTo(this.nextBlockClicked) < Specs.swapSpeed
+                            && this.currentBlockModel.position.clone().distanceTo(this.currentBlockClicked) < Specs.swapSpeed) {
+
+                            this.nextBlockModel.position.set(this.nextBlockClicked.x, this.nextBlockClicked.y, 0)
+                            this.currentBlockModel.position.set(this.currentBlockClicked.x, this.currentBlockClicked.y, 0)
+
+                            var swap = this.getBRBoardPosition(this.currentBlockPosition)
+                            this.BRBoard[9 - this.currentBlockPosition.y / (Specs.scale * 2)][this.currentBlockPosition.x / (Specs.scale * 2)] = this.getBRBoardPosition(this.nextBlockPosition)
+                            this.BRBoard[9 - this.nextBlockPosition.y / (Specs.scale * 2)][this.nextBlockPosition.x / (Specs.scale * 2)] = swap
+
+                            this.isSwapPossible = false
+                            this.isSwapped = 0
+                            this.currentBlockModel = null
+                            this.nextBlockModel = null
+                            this.isLineMatchChecked = false
+                            this.indexesMatchedHorizontal = []
+
+                            document.addEventListener("mousemove", this.cursorMove)
+                            document.addEventListener("click", this.leftClick)
+                            document.addEventListener("contextmenu", this.rightClick)
+
+                            console.log("After swap")
+
+                        }
+
+                    }
+
                     // console.log(this.currentBlockModel.position);
                     // console.log(this.nextBlockModel.position);
-                    console.log("After swap")
                 }
 
             }
@@ -134,10 +313,10 @@ class GameBR {
                 || (intersects.length <= 0 && this.isBlockClicked && this.pointedBlockModel.parent.children[0].material.color.r != 1)) {
                 if (this.pointedBlockModel != null)
                     if (!this.isBlockClicked)
-                        for (let i = 3; i < Specs.sizeYxX; i++)
+                        for (let i = 2; i < this.scene.children.length; i++)
                             this.scene.children[i].children[0].material = Specs.matCDark
                     else if (this.isBlockClicked)
-                        for (let i = 3; i < Specs.sizeYxX; i++)
+                        for (let i = 2; i < this.scene.children.length; i++)
                             if (this.scene.children[i] != this.currentBlockModel)
                                 this.scene.children[i].children[0].material = Specs.matCDark
                 document.body.style.cursor = "default"
@@ -175,30 +354,34 @@ class GameBR {
                     // console.log("you clicked that block", this.currentBlockModel)
                     this.nextBlockModel = intersects[0].object.parent
                     this.nextBlockPosition = intersects[0].object.parent.position
-                    this.currentBlockClicked = new THREE.Vector3(this.currentBlockPosition.x, this.currentBlockPosition.y, this.currentBlockPosition.z)
-                    this.nextBlockClicked = new THREE.Vector3(this.nextBlockPosition.x, this.nextBlockPosition.y, this.nextBlockPosition.z)
+                    this.currentBlockClicked = new THREE.Vector3(this.currentBlockPosition.x, this.currentBlockPosition.y, 0)
+                    this.nextBlockClicked = new THREE.Vector3(this.nextBlockPosition.x, this.nextBlockPosition.y, 0)
                     this.currentDirectionVect = this.nextBlockClicked.clone().sub(this.currentBlockClicked).normalize()
                     this.nextDirectionVect = this.currentBlockClicked.clone().sub(this.nextBlockClicked).normalize()
                     if (this.nextBlockModel.position.clone().distanceTo(this.currentBlockClicked) < 105) {
+
                         console.log(this.BRBoard[9 - this.currentBlockPosition.y / (Specs.scale * 2)][this.currentBlockPosition.x / (Specs.scale * 2)]);
                         console.log(9 - this.currentBlockPosition.y / (Specs.scale * 2), this.currentBlockPosition.x / (Specs.scale * 2));
                         console.log(this.BRBoard[9 - this.nextBlockPosition.y / (Specs.scale * 2)][this.nextBlockPosition.x / (Specs.scale * 2)]);
                         console.log(9 - this.nextBlockPosition.y / (Specs.scale * 2), this.nextBlockPosition.x / (Specs.scale * 2));
                         console.log(this.currentBlockModel.position);
                         console.log(this.nextBlockModel.position);
-                        var swap = this.BRBoard[9 - this.currentBlockPosition.y / (Specs.scale * 2)][this.currentBlockPosition.x / (Specs.scale * 2)]
-                        this.BRBoard[9 - this.currentBlockPosition.y / (Specs.scale * 2)][this.currentBlockPosition.x / (Specs.scale * 2)] = this.BRBoard[9 - this.nextBlockPosition.y / (Specs.scale * 2)][this.nextBlockPosition.x / (Specs.scale * 2)]
+
+                        var swap = this.getBRBoardPosition(this.currentBlockPosition)
+                        this.BRBoard[9 - this.currentBlockPosition.y / (Specs.scale * 2)][this.currentBlockPosition.x / (Specs.scale * 2)] = this.getBRBoardPosition(this.nextBlockPosition)
                         this.BRBoard[9 - this.nextBlockPosition.y / (Specs.scale * 2)][this.nextBlockPosition.x / (Specs.scale * 2)] = swap
                         this.isBlockClicked = false
                         this.isSwapPossible = true
                         this.currentBlockModel.children[0].material = Specs.matCDark
                         this.nextBlockModel.children[0].material = Specs.matCDark
+
                         document.body.style.cursor = "default"
                         document.removeEventListener("click", this.leftClick)
                         document.removeEventListener("mousemove", this.cursorMove)
                         document.removeEventListener("contextmenu", this.rightClick)
                         console.log(this.nextBlockModel.position.clone().distanceTo(this.currentBlockClicked))
                         console.log(this.currentBlockModel.position.clone().distanceTo(this.nextBlockClicked))
+
                     }
 
                 }
@@ -219,4 +402,16 @@ class GameBR {
         document.addEventListener("click", this.leftClick)
         document.addEventListener("contextmenu", this.rightClick)
     }
+
+    getBRBoardPosition(object) {
+        return this.BRBoard[Math.round(9 - object.y / (Specs.scale * 2))][Math.round(object.x / (Specs.scale * 2))]
+    }
+
+    getBlockByPosition(x, y) {
+        for (let i = 2; i < this.scene.children.length; i++)
+            if (Math.round(this.scene.children[i].position.x / (Specs.scale * 2)) == x && Math.round(9 - this.scene.children[i].position.y / (Specs.scale * 2)) == y)
+                return this.scene.children[i]
+        return false
+    }
+
 }

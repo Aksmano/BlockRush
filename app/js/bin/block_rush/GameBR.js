@@ -19,7 +19,7 @@ class GameBR {
 
         this.pointedBlockModel = null
 
-        this.indexesMatchedHorizontal = []
+        this.indexesMatched = []
         this.blocksToDestruction = []
         this.fallingBlocks = []
         this.blocksToInsert = []
@@ -32,6 +32,7 @@ class GameBR {
         this.isLineMatchChecked = false
         this.isSwapped = 0
         this.isLineMatched = false
+        this.isEveryLineChecked = true
 
         // var axes = new THREE.AxesHelper(100)
         // this.scene.add(axes)
@@ -86,7 +87,7 @@ class GameBR {
         this.camera.updateProjectionMatrix()
         console.log(this.scene);
 
-        const insertingBlocks = () => {
+        this.insertingBlocks = () => {
             for (let i = 1; i < 9; i++)
                 for (let j = 0; j < 9; j++)
                     if (!this.getBlockByPosition(j, 9 - i)) {
@@ -119,7 +120,8 @@ class GameBR {
                     this.nextBlockModel = null
                     this.isLineMatchChecked = false
                     this.isLineMatched = false
-                    this.indexesMatchedHorizontal = []
+                    this.indexesMatched = []
+                    this.isEveryLineChecked = true
                     console.log(this.blocksToDestruction);
                     console.log(this.blocksToInsert);
                     console.log(this.fallingBlocks);
@@ -127,15 +129,16 @@ class GameBR {
                         if (![0, 1, 2, 3, 4, 5, 6, 7, 8].includes(this.scene.children[i].position.x / (Specs.scale * 2))
                             || ![0, 1, 2, 3, 4, 5, 6, 7, 8].includes(this.scene.children[i].position.y / (Specs.scale * 2))
                             || ![0, 1, 2, 3, 4, 5, 6, 7, 8].includes(this.scene.children[i].position.z / (Specs.scale * 2)))
-                                console.log(this.scene.children[i], this.scene.children[i].position.x / (Specs.scale * 2), this.scene.children[i].position.y / (Specs.scale * 2), this.scene.children[i].position.z / (Specs.scale * 2));
-                                
+                            console.log(this.scene.children[i], this.scene.children[i].position.x / (Specs.scale * 2), this.scene.children[i].position.y / (Specs.scale * 2), this.scene.children[i].position.z / (Specs.scale * 2));
+                    // this.checkHorizontal()
+
                 }
             }
             insertNewBlock()
         }
 
-        const blockFalling = () => {
-            var request = requestAnimationFrame(blockFalling)
+        this.blockFalling = () => {
+            var request = requestAnimationFrame(this.blockFalling)
             var positionY = null
             for (let i = 0; i < this.fallingBlocks.length; i++) {
                 positionY = this.fallingBlocks[i].position.y
@@ -146,12 +149,12 @@ class GameBR {
                 cancelAnimationFrame(request)
                 this.fallCounter = 0
                 this.fallingBlocks = []
-                insertingBlocks()
+                this.insertingBlocks()
             }
         }
 
-        const scaleBlockSmaller = () => {
-            var request = requestAnimationFrame(scaleBlockSmaller)
+        this.scaleBlockSmaller = () => {
+            var request = requestAnimationFrame(this.scaleBlockSmaller)
             var scale = null
             for (let i = 0; i < this.blocksToDestruction.length; i++) {
                 scale = this.blocksToDestruction[i].scale
@@ -163,7 +166,7 @@ class GameBR {
                     this.scene.remove(this.blocksToDestruction[i])
                 cancelAnimationFrame(request)
                 this.blocksToDestruction = []
-                blockFalling()
+                this.blockFalling()
             }
         }
 
@@ -198,17 +201,24 @@ class GameBR {
                 }
 
                 if (this.isSwapped == 2) {
-                    var indexes = []
-                    var prevLine = null
 
-                    for (let i = 9; i > 0; i--) {
-                        prevLine = JSON.stringify(this.BRBoard[i], null, "")
-                        this.BRBoard, indexes = this.LineCheck.checkHoriz(this.BRBoard, i)
+                    // while (this.isEveryLineChecked)
+                    // this.checkHorizontal()
+                    for (let i = 0; i < 9; i++) {
+                        var indexes = []
+                        var prevLine = null
+                        var currLine = null
+                        for (let j = 0; j < 9; j++)
+                            prevLine += this.BRBoard[j][i].toString()
+                        this.BRBoard, indexes = this.LineCheck.checkVert(this.BRBoard, i)
+                        for (let j = 0; j < 9; j++)
+                            currLine += this.BRBoard[j][i].toString()
                         // console.log(prevLine)
                         // console.log(JSON.stringify(this.BRBoard[i], null, ""));
                         console.log(this.isLineMatched, "before")
-                        if (prevLine != JSON.stringify(this.BRBoard[i], null, ""))
+                        if (prevLine != currLine)
                             this.isLineMatched = true
+                        // else counter++
                         console.log(indexes)
                         console.log(this.isLineMatched, "after")
 
@@ -221,42 +231,44 @@ class GameBR {
 
                             for (let j = 0; j < indexes.length; j++)
                                 for (let k = 0; k < indexes[j].length; k++)
-                                    this.indexesMatchedHorizontal.push(indexes[j][k])
-                            console.log(this.indexesMatchedHorizontal);
+                                    this.indexesMatched.push(indexes[j][k])
+                            console.log(this.indexesMatched);
 
                             var index = 0
                             console.log(i);
-                            while (index < this.indexesMatchedHorizontal.length) {
-                                for (let k = 0; k < indexes.length; k++)
-                                    for (let j = 2; j < this.scene.children.length; j++) {
-                                        if ((Math.round(9 - this.scene.children[j].position.y / (Specs.scale * 2)) == i)
-                                            && Math.round(this.scene.children[j].position.x / (Specs.scale * 2)) == this.indexesMatchedHorizontal[index]) {
-                                            index++
-                                            this.blocksToDestruction.push(this.scene.children[j])
-                                            if (index == indexes[k].length)
-                                                break
+                            // while (index < this.indexesMatched.length) {
+                            for (let k = 0; k < indexes.length; k++)
+                                for (let j = 2; j < this.scene.children.length; j++) {
+                                    if ((Math.round(9 - this.scene.children[j].position.x / (Specs.scale * 2)) == i)
+                                        && Math.round(this.scene.children[j].position.y / (Specs.scale * 2)) == 9 - this.indexesMatched[index]) {
+                                        index++
+                                        this.blocksToDestruction.push(this.scene.children[j])
+                                        if (index == indexes[k].length)
+                                            break
 
-                                        }
                                     }
-                            }
-                            console.log(this.blocksToDestruction)
-                            for (let j = i - 1; j > 0; j--)
-                                for (let k = 0; k < this.indexesMatchedHorizontal.length; k++) {
-                                    this.fallingBlocks.push(this.getBlockByPosition(this.indexesMatchedHorizontal[k], j))
                                 }
+                            // }
+                            console.log(this.blocksToDestruction)
+                            // for (let j = i - 1; j > 0; j--)
+                            for (let k = 9; k > 0; k--) {
+                                if (k < this.indexesMatched[0])
+                                    this.fallingBlocks.push(this.getBlockByPosition(i, this.indexesMatched[k]))
+                            }
 
                             console.log(this.fallingBlocks);
                             document.removeEventListener("click", this.leftClick)
                             document.removeEventListener("mousemove", this.cursorMove)
                             document.removeEventListener("contextmenu", this.rightClick)
-                            scaleBlockSmaller()
+                            this.scaleBlockSmaller()
+                            // return true
                             // blockFalling()
                             break
+
                         }
-
-                        else
+                        else {
                             this.isLineMatchChecked = true
-
+                        }
                     }
 
                     if (this.isLineMatchChecked) {
@@ -283,7 +295,7 @@ class GameBR {
                             this.currentBlockModel = null
                             this.nextBlockModel = null
                             this.isLineMatchChecked = false
-                            this.indexesMatchedHorizontal = []
+                            this.indexesMatched = []
 
                             document.addEventListener("mousemove", this.cursorMove)
                             document.addEventListener("click", this.leftClick)
@@ -302,6 +314,8 @@ class GameBR {
             }
         }
         render()
+
+
 
         this.cursorMove = (e) => {
             this.mouseVector.x = (e.clientX / $(window).width()) * 2 - 1;
@@ -395,6 +409,8 @@ class GameBR {
 
             try { this.pointedBlockModel.material = Specs.matCDark }
             catch{ console.log("pointedBlockModel == null"); }
+
+
             this.isBlockClicked = false
         }
 
@@ -412,6 +428,76 @@ class GameBR {
             if (Math.round(this.scene.children[i].position.x / (Specs.scale * 2)) == x && Math.round(9 - this.scene.children[i].position.y / (Specs.scale * 2)) == y)
                 return this.scene.children[i]
         return false
+    }
+
+    checkHorizontal() {
+        var counter = 0
+        for (let i = 9; i > 0; i--) {
+            var indexes = []
+            var prevLine = null
+            prevLine = JSON.stringify(this.BRBoard[i], null, "")
+            this.BRBoard, indexes = this.LineCheck.checkHoriz(this.BRBoard, i)
+            // console.log(prevLine)
+            // console.log(JSON.stringify(this.BRBoard[i], null, ""));
+            console.log(this.isLineMatched, "before")
+            if (prevLine != JSON.stringify(this.BRBoard[i], null, ""))
+                this.isLineMatched = true
+            else counter++
+            console.log(indexes)
+            console.log(this.isLineMatched, "after")
+
+            if (this.isLineMatched) {
+                this.isSwapPossible = false
+                this.isSwapped = 0
+                this.currentBlockModel = null
+                this.nextBlockModel = null
+                console.log("in isLineMatched")
+
+                for (let j = 0; j < indexes.length; j++)
+                    for (let k = 0; k < indexes[j].length; k++)
+                        this.indexesMatched.push(indexes[j][k])
+                console.log(this.indexesMatched);
+
+                var index = 0
+                console.log(i);
+                while (index < this.indexesMatched.length) {
+                    for (let k = 0; k < indexes.length; k++)
+                        for (let j = 2; j < this.scene.children.length; j++) {
+                            if ((Math.round(9 - this.scene.children[j].position.y / (Specs.scale * 2)) == i)
+                                && Math.round(this.scene.children[j].position.x / (Specs.scale * 2)) == this.indexesMatched[index]) {
+                                index++
+                                this.blocksToDestruction.push(this.scene.children[j])
+                                if (index == indexes[k].length)
+                                    break
+
+                            }
+                        }
+                }
+                console.log(this.blocksToDestruction)
+                for (let j = i - 1; j > 0; j--)
+                    for (let k = 0; k < this.indexesMatched.length; k++) {
+                        this.fallingBlocks.push(this.getBlockByPosition(this.indexesMatched[k], j))
+                    }
+
+                console.log(this.fallingBlocks);
+                document.removeEventListener("click", this.leftClick)
+                document.removeEventListener("mousemove", this.cursorMove)
+                document.removeEventListener("contextmenu", this.rightClick)
+                this.scaleBlockSmaller()
+                // return true
+                // blockFalling()
+                break
+            }
+
+            else {
+                this.isLineMatchChecked = true
+            }
+
+        }
+        if (counter == 9) {
+            // this.isLineMatchChecked = true
+            this.isEveryLineChecked = false
+        }
     }
 
 }

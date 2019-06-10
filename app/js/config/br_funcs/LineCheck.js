@@ -85,7 +85,7 @@ class LineMatch {
     checkVert(board, j) {
         // console.log(JSON.stringify(board[i], null, ""));
         console.log("Vert");
-        
+
         var isMatch = board[9][j]
         var howMany = 1
         var indexes = []
@@ -102,27 +102,29 @@ class LineMatch {
             }
             else {
                 if (howMany >= 3) {
-                    flag = true
+                    // flag = true
                     console.log("how many = " + howMany)
                     console.log(indexes)
-                    // #region
-                    for (let k = 0; k < indexes.length; k++)
-                        // for (let l = 9; l > 0; l--)
-                        try {
-                            if (board[indexes[k] - indexes.length][j] == 8) {
-                                console.log("change 8")
-                                board[indexes[k]][j] = Math.ceil(Math.random() * 6) - 1
-                                // break
-                            }
-                            else {
-                                console.log("change normal")
-                                board[indexes[k]][j] = board[indexes[k] - indexes.length][j]
-                            }
-                        }
-                        catch{
-                            console.log("change catch")
-                            board[indexes[k]][j] = Math.ceil(Math.random() * 6) - 1
-                        }
+                    // // #region
+                    // for (let k = indexes[0]; k > 0; k--)
+                    //     // for (let l = 9; l > 0; l--)
+                    //     try {
+                    //         if (board[k - indexes.length][j] == 8) {
+                    //             console.log("change 8")
+                    //             board[k][j] = Math.ceil(Math.random() * 6) - 1
+                    //             // break
+                    //         }
+                    //         else {
+                    //             console.log("change normal")
+                    //             board[k][j] = board[k - indexes.length][j]
+                    //         }
+                    //     }
+                    //     catch{
+                    //         console.log("change catch")
+                    //         board[k][j] = Math.ceil(Math.random() * 6) - 1
+                    //     }
+
+
                     // #endregion
                     // for (let l = indexes[0]; l > 0; l--)
                     //     try {
@@ -148,45 +150,109 @@ class LineMatch {
             }
 
         if (howMany >= 3) {
-            flag = true
+            //     flag = true
             console.log("how many = " + howMany)
             console.log(indexes)
-            // #region
-            for (let k = 0; k < indexes.length; k++)
-                // for (let l = 9; l > 0; l--)
+            //     // #region
+            //     for (let k = 0; k < indexes.length; k++)
+            //         // for (let l = 9; l > 0; l--)
+            //         try {
+            //             if (board[indexes[k] - indexes.length][j] == 8) {
+            //                 console.log("change 8")
+            //                 board[indexes[k]][j] = Math.ceil(Math.random() * 6) - 1
+            //                 // break
+            //             }
+            //             else {
+            //                 console.log("change normal")
+            //                 board[indexes[k]][j] = board[indexes[k] - indexes.length][j]
+            //             }
+            //         }
+            //         catch{
+            //             console.log("change catch")
+            //             board[indexes[k]][j] = Math.ceil(Math.random() * 6) - 1
+            //         }
+            //     // #endregion
+            //     // for (let l = indexes[0]; l > 0; l--)
+            //     //     try {
+            //     //         if (board[l - indexes.length][j] == 8) {
+            //     //             console.log("change 8")
+            //     //             board[l][j] = board[l - (indexes.length)][j]
+            //     //         }
+            //     //         else {
+            //     //             console.log("change normal")
+            //     //             board[l][j] = board[l - indexes.length][j]
+            //     //         }
+            //     //     }
+            //     //     catch{
+            //     //         console.log("change catch")
+            //     //         board[l][j] = Math.ceil(Math.random() * 6) - 1
+            //     //     }
+            matches.push(indexes)
+        }
+        
+        indexes = []
+
+        for (let i = 0; i < matches.length; i++)
+            for (let k = 0; k < matches[i].length; k++)
+                indexes.push(matches[i][k])
+
+        for (let k = 9; k > 0; k--)
+            if (k <= indexes[0])
                 try {
-                    if (board[indexes[k] - indexes.length][j] == 8) {
+                    if (board[k - indexes.length][j] == 8) {
                         console.log("change 8")
-                        board[indexes[k]][j] = Math.ceil(Math.random() * 6) - 1
+                        board[k][j] = Math.ceil(Math.random() * 6) - 1
                         // break
                     }
                     else {
                         console.log("change normal")
-                        board[indexes[k]][j] = board[indexes[k] - indexes.length][j]
+                        board[k][j] = board[k - indexes.length][j]
                     }
                 }
                 catch{
                     console.log("change catch")
-                    board[indexes[k]][j] = Math.ceil(Math.random() * 6) - 1
+                    board[k][j] = Math.ceil(Math.random() * 6) - 1
                 }
-            // #endregion
-            // for (let l = indexes[0]; l > 0; l--)
-            //     try {
-            //         if (board[l - indexes.length][j] == 8) {
-            //             console.log("change 8")
-            //             board[l][j] = board[l - (indexes.length)][j]
-            //         }
-            //         else {
-            //             console.log("change normal")
-            //             board[l][j] = board[l - indexes.length][j]
-            //         }
-            //     }
-            //     catch{
-            //         console.log("change catch")
-            //         board[l][j] = Math.ceil(Math.random() * 6) - 1
-            //     }
-            matches.push(indexes)
-        }
+        // if (howMany >= 3) {
+        //     flag = true
+        //     console.log("how many = " + howMany)
+        //     console.log(indexes)
+        //     // #region
+        //     for (let k = 0; k < indexes.length; k++)
+        //         // for (let l = 9; l > 0; l--)
+        //         try {
+        //             if (board[indexes[k] - indexes.length][j] == 8) {
+        //                 console.log("change 8")
+        //                 board[indexes[k]][j] = Math.ceil(Math.random() * 6) - 1
+        //                 // break
+        //             }
+        //             else {
+        //                 console.log("change normal")
+        //                 board[indexes[k]][j] = board[indexes[k] - indexes.length][j]
+        //             }
+        //         }
+        //         catch{
+        //             console.log("change catch")
+        //             board[indexes[k]][j] = Math.ceil(Math.random() * 6) - 1
+        //         }
+        //     // #endregion
+        //     // for (let l = indexes[0]; l > 0; l--)
+        //     //     try {
+        //     //         if (board[l - indexes.length][j] == 8) {
+        //     //             console.log("change 8")
+        //     //             board[l][j] = board[l - (indexes.length)][j]
+        //     //         }
+        //     //         else {
+        //     //             console.log("change normal")
+        //     //             board[l][j] = board[l - indexes.length][j]
+        //     //         }
+        //     //     }
+        //     //     catch{
+        //     //         console.log("change catch")
+        //     //         board[l][j] = Math.ceil(Math.random() * 6) - 1
+        //     //     }
+        //     matches.push(indexes)
+        // }
 
         console.log(JSON.stringify(board, null, ""));
         console.log(flag);

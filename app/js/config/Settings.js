@@ -1,4 +1,5 @@
 var Specs = {
+    scene: new THREE.Scene(),
     camera: new THREE.PerspectiveCamera(
         45, // kąt kamery (FOV)
         window.innerWidth / window.innerHeight, // proporcje ekranu (16:9 w przypadku tego)
@@ -51,7 +52,7 @@ var Specs = {
             new THREE.MeshStandardMaterial({ color: 0x2a1a00, roughness: 0.7, metalness: 0.8, side: THREE.DoubleSide, wireframe: false, transparent: false, opacity: 1 }),
             new THREE.MeshStandardMaterial({ color: 0x2a002a, roughness: 0.7, metalness: 0.8, side: THREE.DoubleSide, wireframe: false, transparent: false, opacity: 1 })
         ],
-        
+
     matCLightBlue: new THREE.MeshBasicMaterial({ color: 0x7000D4, roughness: 0.7, metalness: 0.8, side: THREE.DoubleSide, wireframe: false, transparent: false, opacity: 1 }),
     matCDarkBlue: new THREE.MeshBasicMaterial({ color: 0x7777D4, roughness: 0.7, metalness: 0.8, side: THREE.DoubleSide, wireframe: false, transparent: false, opacity: 1 }),
     matCBlack: new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7, metalness: 0.8, side: THREE.DoubleSide, wireframe: false, transparent: false, opacity: 1 }),
@@ -71,6 +72,46 @@ var Specs = {
     swapSpeed: 4.75,
     fadingSpeed: 4.75,
     fallingSpeed: 10,
+
+    BlockPositionChange: new BlockChange(),
+    AnimateBlock: new BlockAnimations(),
+    LineCheck: new LineMatch(),
+    MouseEvent: new MouseEvents(),
+
+    BrickC: null,
+    Brick: null,
+
+    raycaster: new THREE.Raycaster(),
+    mouseVector: new THREE.Vector2(),
+
+    currentBlockPosition: null,
+    currentBlockModel: null,
+    currentBlockClicked: null,
+    currentDirectionVect: null,
+
+    nextBlockModel: null,
+    nextBlockPosition: null,
+    nextBlockClicked: null,
+    nextDirectionVect: null,
+
+    pointedBlockModel: null,
+
+    matches: [],
+    indexesMatched: [],
+    blocksToDestruction: [],
+    fallingBlocks: [],
+    blocksToInsert: [],
+
+    fallCounter: 0,
+
+    isBlockClicked: false,
+    isSwapRendering: false,
+    isSwapPossible: false,
+    isLineMatchChecked: false,
+    isSwapped: 0,
+    isLineMatched: false,
+    isEveryLineChecked: true,
+
     brickDist: {
         "cosmic_brick": 2.12,
         "normic_brick": 2,
@@ -83,6 +124,19 @@ var Specs = {
         "regular_brick": 1.75
     },
 
+    getBRBoardPosition(object) {
+        return Specs.BRBoard[Math.round(9 - object.y / (Specs.scale * 2))][Math.round(object.x / (Specs.scale * 2))]
+    },
+
+    getBlockByPosition(x, y) {
+        for (let i = 2; i < Specs.scene.children.length; i++)
+            if (Math.round(Specs.scene.children[i].position.x / (Specs.scale * 2)) == x && Math.round(9 - Specs.scene.children[i].position.y / (Specs.scale * 2)) == y)
+                return Specs.scene.children[i]
+        return false
+
+    },
+
+    BRBoard: [],
     BRTable: [
         [8, 8, 8, 8, 8, 8, 8, 8, 8],
         [9, 9, 9, 9, 9, 9, 9, 9, 9],

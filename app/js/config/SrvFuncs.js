@@ -1,6 +1,6 @@
 class SrvFuncs {
     constructor() {
-        console.log("SrvFuncs class created")        
+        // console.log("SrvFuncs class created")        
     }
 
     getIndex(response, fs) {

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,11 +17,30 @@
     <script src="../js/config/br_funcs/BlockChange.js"></script>
     <script src="../js/config/Settings.js"></script>
     <script src="../js/assets/Brick.js"></script>
+    <script src="../js/config/br_funcs/BRUI.js"></script>
     <script src="../js/bin/block_rush/GameBR.js"></script>
     <script src="../js/bin/block_rush/MainBR.js"></script>
     <title>Block Rush</title>
 </head>
+
 <body>
+    <div id="configuration">
+        Your time<br>
+        (in seconds 60-600): <input type="number" id="pTime" minlength="60" maxlength="600" value="60">
+        Points to win<br>
+        (10000-10000000): <input type="number" id="pPoints" minlength="10000" maxlength="10000000" value="10000">
+        <input type="button" value="Play for win" id="pfw">
+        <input type="button" value="Play for fun" id="pff">
+    </div>
+    <div id="menu">
+        <div id="points">Your points: <span id="pointsNumber"></span></div>
+        <div id="multipler">Your points multipler: <span id="multiplerNumber"></span></div>
+        <div id="time">Your time to end: <span id="timeNumber"></span></div>
+        <div id="winpoints">Points to win: <span id="winpointsNumber"></span></div>
+    </div>
     <div id="root"></div>
+    <div id="backg"></div>
+
 </body>
+
 </html>

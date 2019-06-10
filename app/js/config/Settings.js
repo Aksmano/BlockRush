@@ -77,6 +77,7 @@ var Specs = {
     AnimateBlock: new BlockAnimations(),
     LineCheck: new LineMatch(),
     MouseEvent: new MouseEvents(),
+    
 
     BrickC: null,
     Brick: null,
@@ -111,6 +112,12 @@ var Specs = {
     isSwapped: 0,
     isLineMatched: false,
     isEveryLineChecked: true,
+    isReadyToStart: false,
+
+    playerPoints: 0,
+    comboMultipler: 0,
+    timeToEnd: 0,
+    pointsToWin: 0,
 
     brickDist: {
         "cosmic_brick": 2.12,

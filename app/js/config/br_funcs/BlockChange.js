@@ -22,6 +22,7 @@ class BlockChange {
                 Specs.isSwapped = 0
                 Specs.currentBlockModel = null
                 Specs.nextBlockModel = null
+                Specs.comboMultipler++
                 console.log("in isLineMatched")
 
                 for (let j = 0; j < Specs.matches.length; j++)
@@ -38,6 +39,7 @@ class BlockChange {
                                 && Math.round(Specs.scene.children[j].position.x / (Specs.scale * 2)) == Specs.indexesMatched[index]) {
                                 index++
                                 Specs.blocksToDestruction.push(Specs.scene.children[j])
+                                Specs.playerPoints += 20 * Specs.comboMultipler
                                 if (index == Specs.matches[k].length)
                                     break
 
@@ -51,6 +53,8 @@ class BlockChange {
                     }
 
                 console.log(Specs.fallingBlocks);
+                document.getElementById("pointsNumber").innerText = Specs.playerPoints
+                document.getElementById("multiplerNumber").innerText = Specs.comboMultipler
                 document.removeEventListener("click", Specs.MouseEvent.leftClick)
                 document.removeEventListener("mousemove", Specs.MouseEvent.cursorMove)
                 document.removeEventListener("contextmenu", Specs.MouseEvent.rightClick)
@@ -73,6 +77,8 @@ class BlockChange {
         else if (this.counter == 18) {
             document.body.style.cursor = "default"
             Specs.isEveryLineChecked = false
+            Specs.comboMultipler = 0
+            document.getElementById("multiplerNumber").innerText = Specs.comboMultipler
             this.counter = 0
         }
     }
@@ -100,6 +106,7 @@ class BlockChange {
                 Specs.isSwapped = 0
                 Specs.currentBlockModel = null
                 Specs.nextBlockModel = null
+                Specs.comboMultipler++
                 console.log("in isLineMatched")
 
                 for (let j = 0; j < Specs.matches.length; j++)
@@ -116,6 +123,7 @@ class BlockChange {
                             && Specs.indexesMatched.includes(Math.round(9 - Specs.scene.children[j].position.y / (Specs.scale * 2)))) {
                             index++
                             Specs.blocksToDestruction.push(Specs.scene.children[j])
+                            Specs.playerPoints += 20 * Specs.comboMultipler
                             if (index == Specs.matches[k].length)
                                 break
 
@@ -130,6 +138,8 @@ class BlockChange {
 
 
                 console.log(Specs.fallingBlocks);
+                document.getElementById("pointsNumber").innerText = Specs.playerPoints
+                document.getElementById("multiplerNumber").innerText = Specs.comboMultipler
                 document.removeEventListener("click", Specs.MouseEvent.leftClick)
                 document.removeEventListener("mousemove", Specs.MouseEvent.cursorMove)
                 document.removeEventListener("contextmenu", Specs.MouseEvent.rightClick)
@@ -150,6 +160,8 @@ class BlockChange {
         else if (this.counter == 18) {
             document.body.style.cursor = "default"
             Specs.isEveryLineChecked = false
+            Specs.comboMultipler = 0
+            document.getElementById("multiplerNumber").innerText = Specs.comboMultipler
             this.counter = 0
         }
     }

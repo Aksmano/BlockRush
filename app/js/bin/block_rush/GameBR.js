@@ -3,15 +3,16 @@ class GameBR {
         Specs.brickType = brickType
 
         Specs.BRBoard = JSON.parse(JSON.stringify(Specs.BRTable, null, 4))
+        this.BRUI = new BRUI(),
 
-        // var axes = new THREE.AxesHelper(100)
-        // Specs.scene.add(axes)
+            // var axes = new THREE.AxesHelper(100)
+            // Specs.scene.add(axes)
 
-        // var grid = Specs.gridHelper
-        // Specs.scene.add(grid)
+            // var grid = Specs.gridHelper
+            // Specs.scene.add(grid)
 
-        // this.light = Specs.hemiLight
-        this.light = Specs.ambientLight
+            // this.light = Specs.hemiLight
+            this.light = Specs.ambientLight
         // this.light.position.set(0, 2 * Specs.scale, 0)
         Specs.scene.add(this.light)
 
@@ -32,11 +33,11 @@ class GameBR {
                     Specs.scene.add(model)
                 }
             console.log(JSON.stringify(Specs.BRBoard, null, ""));
-            setTimeout()
+            // setTimeout()
             Specs.BlockPositionChange.changeHorizontal()
         })
 
-        this.renderer = new THREE.WebGLRenderer
+        this.renderer = new THREE.WebGLRenderer({ alpha: true })
         // var orbitControl = new THREE.OrbitControls(Specs.orthoCamera, this.renderer.domElement)
 
         // orbitControl.addEventListener('change', () => {
@@ -48,9 +49,11 @@ class GameBR {
         this.renderer.setClearColor(0x444444) // zamiast # jest 0x
         this.renderer.setSize(window.innerWidth, window.innerHeight) //ustawienie wymiarów renderu okna
         this.renderer.antialias = true
+        // this.renderer.alpha = true
         this.renderer.shadowMap.enabled = true
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         $("#root").append(this.renderer.domElement)  // dodanie renderera do diva
+        // document.getElementById("backg").style.backgroundImage = 'url(../../../img/br_img/photo1.png)'
         Specs.orthoCamera.position.set(0, 0, 6000) // ustawienie pozycji kamery, mozna tez camera.position.oś = wartość
         Specs.orthoCamera.lookAt(Specs.scene.position) // nakierowanie kamery na punkt (0,0,0)
         Specs.orthoCamera.position.set(400, 400, 0)
@@ -58,39 +61,41 @@ class GameBR {
         Specs.orthoCamera.updateProjectionMatrix()
         console.log(Specs.scene);
         const render = () => {
-            requestAnimationFrame(render)
-            var aspect = window.innerWidth / window.innerHeight;
-            console.log(aspect);
-            
-            Specs.orthoCamera.left = -window.innerWidth / aspect;
-            Specs.orthoCamera.right = window.innerWidth / aspect;
-            Specs.orthoCamera.top = window.innerHeight / aspect;
-            Specs.orthoCamera.bottom = -window.innerHeight / aspect;
-            Specs.orthoCamera.updateProjectionMatrix();
-            this.renderer.setSize(window.innerWidth, window.innerHeight);
-            // this.renderer.render(Specs.scene, Specs.orthoCamera);
-            this.renderer.render(Specs.scene, Specs.orthoCamera);
+            if (Specs.isReadyToStart) {
+                requestAnimationFrame(render)
+                var aspect = window.innerWidth / window.innerHeight;
+                // console.log(aspect);
 
-            if (Specs.isSwapPossible) {
-                // console.log(Specs.currentBlockClicked);
-                // console.log(Specs.nextBlockClicked);
-                if (Specs.isSwapped < 2) {
-                    Specs.BlockPositionChange.swapBlocks()
-                }
+                Specs.orthoCamera.left = -window.innerWidth / aspect;
+                Specs.orthoCamera.right = window.innerWidth / aspect;
+                Specs.orthoCamera.top = window.innerHeight / aspect;
+                Specs.orthoCamera.bottom = -window.innerHeight / aspect;
+                Specs.orthoCamera.updateProjectionMatrix();
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                // this.renderer.render(Specs.scene, Specs.orthoCamera);
+                this.renderer.render(Specs.scene, Specs.orthoCamera);
 
-                if (Specs.isSwapped == 2) {
-
-                    // Specs.BlockPositionChange.changeVertical()
-                    Specs.BlockPositionChange.changeHorizontal()
-
-                    if (Specs.isLineMatchChecked) {
-                        Specs.BlockPositionChange.swapBlocksBack()
+                if (Specs.isSwapPossible) {
+                    // console.log(Specs.currentBlockClicked);
+                    // console.log(Specs.nextBlockClicked);
+                    if (Specs.isSwapped < 2) {
+                        Specs.BlockPositionChange.swapBlocks()
                     }
 
-                    // console.log(Specs.currentBlockModel.position);
-                    // console.log(Specs.nextBlockModel.position);
-                }
+                    if (Specs.isSwapped == 2) {
 
+                        // Specs.BlockPositionChange.changeVertical()
+                        Specs.BlockPositionChange.changeHorizontal()
+
+                        if (Specs.isLineMatchChecked) {
+                            Specs.BlockPositionChange.swapBlocksBack()
+                        }
+
+                        // console.log(Specs.currentBlockModel.position);
+                        // console.log(Specs.nextBlockModel.position);
+                    }
+
+                }
             }
         }
         render()

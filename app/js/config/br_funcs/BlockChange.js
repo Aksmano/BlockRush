@@ -68,10 +68,6 @@ class BlockChange {
 
         }
         if (this.counter == 9) {
-            // Specs.isLineMatchChecked = true
-            // document.addEventListener("mousemove", Specs.MouseEvent.cursorMove)
-            // document.addEventListener("click", Specs.MouseEvent.leftClick)
-            // document.addEventListener("contextmenu", Specs.MouseEvent.rightClick)
             this.changeVertical()
         }
         else if (this.counter == 18) {

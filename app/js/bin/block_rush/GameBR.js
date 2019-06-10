@@ -57,25 +57,8 @@ class GameBR {
         Specs.orthoCamera.fov = 34 // ustalenie domyślnego FOVa
         Specs.orthoCamera.updateProjectionMatrix()
         console.log(Specs.scene);
-        // $(window).on('resize', function () {
-        //     // notify the renderer of the size change
-        //     this.renderer.setSize(window.innerWidth, window.innerHeight);
-        //     // update the camera
-        //     Specs.orthoCamera.left = -window.innerWidth / 2;
-        //     Specs.orthoCamera.right = window.innerWidth / 2;
-        //     Specs.orthoCamera.top = window.innerHeight / 2;
-        //     Specs.orthoCamera.bottom = -window.innerHeight / 2;
-        //     Specs.orthoCamera.updateProjectionMatrix();
-        // });
         const render = () => {
             requestAnimationFrame(render)
-            // Specs.orthoCamera.aspect = window.innerWidth / window.innerHeight;
-            // this.renderer.setSize(window.innerWidth, window.innerHeight);
-            // Specs.orthoCamera.left = window.innerWidth / - 2
-            // Specs.orthoCamera.right = window.innerWidth / 2
-            // Specs.orthoCamera.top = window.innerHeight / 2
-            // Specs.orthoCamera.bottom = window.innerHeight / - 2
-            // Specs.orthoCamera.updateProjectionMatrix();
             var aspect = window.innerWidth / window.innerHeight;
             console.log(aspect);
             

@@ -99,8 +99,21 @@ class GameBR {
             }
             if (Specs.isForWin) {
                 if (this.timestamp == 60) {
-                    document.getElementById("timeNumber").innerText = (parseInt(document.getElementById("timeNumber").innerText) - 1)
-                    this.timestamp = 0
+                    if ((parseInt(document.getElementById("timeNumber").innerText) - 1) <= 0 && Specs.pointsToWin > Specs.playerPoints) {
+                        document.body.removeChild(document.getElementById("root"))
+                        document.getElementById("backg").innerText = "You lost"
+                        cancelAnimationFrame(render)
+                    }
+                    else if (Specs.pointsToWin <= Specs.playerPoints) {
+                        document.body.removeChild(document.getElementById("root"))
+                        document.getElementById("backg").innerText = "You won!"
+                        cancelAnimationFrame(render)
+                    }
+                    else {
+                        document.getElementById("timeNumber").innerText = (parseInt(document.getElementById("timeNumber").innerText) - 1)
+                        this.timestamp = 0
+                    }
+
                 }
                 else this.timestamp++
             }

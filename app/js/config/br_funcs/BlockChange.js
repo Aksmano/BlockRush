@@ -53,8 +53,10 @@ class BlockChange {
                     }
 
                 console.log(Specs.fallingBlocks);
-                document.getElementById("pointsNumber").innerText = Specs.playerPoints
-                document.getElementById("multiplerNumber").innerText = Specs.comboMultipler
+                if (!Specs.isFirstTime) {
+                    document.getElementById("pointsNumber").innerText = Specs.playerPoints
+                    document.getElementById("multiplerNumber").innerText = Specs.comboMultipler
+                }
                 document.removeEventListener("click", MouseEvent.leftClick)
                 document.removeEventListener("mousemove", MouseEvent.cursorMove)
                 document.removeEventListener("contextmenu", MouseEvent.rightClick)
@@ -78,8 +80,13 @@ class BlockChange {
             document.body.style.cursor = "default"
             Specs.isEveryLineChecked = false
             Specs.comboMultipler = 0
-            document.getElementById("multiplerNumber").innerText = Specs.comboMultipler
             this.counter = 0
+            if (Specs.isFirstTime) {
+                Specs.isFirstTime = false
+                Specs.playerPoints = 0
+            }
+            else
+                document.getElementById("multiplerNumber").innerText = Specs.comboMultipler
         }
     }
 
@@ -138,8 +145,10 @@ class BlockChange {
 
 
                 console.log(Specs.fallingBlocks);
-                document.getElementById("pointsNumber").innerText = Specs.playerPoints
-                document.getElementById("multiplerNumber").innerText = Specs.comboMultipler
+                if (!Specs.isFirstTime) {
+                    document.getElementById("pointsNumber").innerText = Specs.playerPoints
+                    document.getElementById("multiplerNumber").innerText = Specs.comboMultipler
+                }
                 document.removeEventListener("click", MouseEvent.leftClick)
                 document.removeEventListener("mousemove", MouseEvent.cursorMove)
                 document.removeEventListener("contextmenu", MouseEvent.rightClick)
@@ -161,8 +170,13 @@ class BlockChange {
             document.body.style.cursor = "default"
             Specs.isEveryLineChecked = false
             Specs.comboMultipler = 0
-            document.getElementById("multiplerNumber").innerText = Specs.comboMultipler
             this.counter = 0
+            if (Specs.isFirstTime) {
+                Specs.isFirstTime = false
+                Specs.playerPoints = 0
+            }
+            else
+                document.getElementById("multiplerNumber").innerText = Specs.comboMultipler
         }
     }
 

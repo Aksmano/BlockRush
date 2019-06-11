@@ -109,6 +109,7 @@ var Specs = {
     isReadyToStart: false,
     isReadyToClick: false,
     isForWin: false,
+    isFirstTime: true,
 
     playerPoints: 0,
     comboMultipler: 0,

@@ -4,6 +4,8 @@ class BRUI {
 
         document.getElementById("pff").addEventListener("click", () => { this.playForFun() })
         document.getElementById("pfw").addEventListener("click", () => { this.playForWin(document.getElementById("pTime").value, document.getElementById("pPoints").value) })
+        document.getElementById("pPoints").addEventListener("blur", () => { this.between(5000, 100000, document.getElementById("pPoints")) })
+        document.getElementById("pTime").addEventListener("blur", () => {this.between(60, 600, document.getElementById("pTime"))})
     }
 
     playForFun() {
@@ -27,5 +29,12 @@ class BRUI {
         Specs.isReadyToStart = true
         Specs.isReadyToClick = true
         Specs.isForWin = true
+    }
+
+    between(min, max, obj) {
+        if (obj.value < min)
+            obj.value = min
+        else if (obj.value > max)
+            obj.value = max
     }
 }

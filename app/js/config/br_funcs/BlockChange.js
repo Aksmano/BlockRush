@@ -7,7 +7,7 @@ class BlockChange {
         for (let i = 9; i > 0; i--) {
             var prevLine = null
             prevLine = JSON.stringify(Specs.BRBoard[i], null, "")
-            Specs.BRBoard, Specs.matches = Specs.LineCheck.checkHoriz(Specs.BRBoard, i)
+            Specs.BRBoard, Specs.matches = LineCheck.checkHoriz(Specs.BRBoard, i)
             // console.log(prevLine)
             // console.log(JSON.stringify(Specs.BRBoard[i], null, ""));
             console.log(Specs.isLineMatched, "before")
@@ -55,11 +55,11 @@ class BlockChange {
                 console.log(Specs.fallingBlocks);
                 document.getElementById("pointsNumber").innerText = Specs.playerPoints
                 document.getElementById("multiplerNumber").innerText = Specs.comboMultipler
-                document.removeEventListener("click", Specs.MouseEvent.leftClick)
-                document.removeEventListener("mousemove", Specs.MouseEvent.cursorMove)
-                document.removeEventListener("contextmenu", Specs.MouseEvent.rightClick)
+                document.removeEventListener("click", MouseEvent.leftClick)
+                document.removeEventListener("mousemove", MouseEvent.cursorMove)
+                document.removeEventListener("contextmenu", MouseEvent.rightClick)
                 this.counter = 0
-                Specs.AnimateBlock.scaleBlockSmaller(1, true)
+                AnimateBlock.scaleBlockSmaller(1, true)
                 // return true
                 // blockFalling()
                 break
@@ -89,7 +89,7 @@ class BlockChange {
             var currLine = null
             for (let j = 0; j < 9; j++)
                 prevLine += Specs.BRBoard[j][i].toString()
-            Specs.BRBoard, Specs.matches = Specs.LineCheck.checkVert(Specs.BRBoard, i)
+            Specs.BRBoard, Specs.matches = LineCheck.checkVert(Specs.BRBoard, i)
             for (let j = 0; j < 9; j++)
                 currLine += Specs.BRBoard[j][i].toString()
             // console.log(prevLine)
@@ -140,12 +140,12 @@ class BlockChange {
                 console.log(Specs.fallingBlocks);
                 document.getElementById("pointsNumber").innerText = Specs.playerPoints
                 document.getElementById("multiplerNumber").innerText = Specs.comboMultipler
-                document.removeEventListener("click", Specs.MouseEvent.leftClick)
-                document.removeEventListener("mousemove", Specs.MouseEvent.cursorMove)
-                document.removeEventListener("contextmenu", Specs.MouseEvent.rightClick)
+                document.removeEventListener("click", MouseEvent.leftClick)
+                document.removeEventListener("mousemove", MouseEvent.cursorMove)
+                document.removeEventListener("contextmenu", MouseEvent.rightClick)
                 this.counter = 0
-                Specs.AnimateBlock.scaleBlockSmaller(Specs.indexesMatched.length, false)
-                // Specs.AnimateBlock.scaleBlockSmaller(2)
+                AnimateBlock.scaleBlockSmaller(Specs.indexesMatched.length, false)
+                // AnimateBlock.scaleBlockSmaller(2)
                 // return true
                 // blockFalling()
                 break
@@ -211,9 +211,9 @@ class BlockChange {
             Specs.isLineMatchChecked = false
             Specs.indexesMatched = []
 
-            // document.addEventListener("mousemove", Specs.MouseEvent.cursorMove)
-            // document.addEventListener("click", Specs.MouseEvent.leftClick)
-            // document.addEventListener("contextmenu", Specs.MouseEvent.rightClick)
+            // document.addEventListener("mousemove", MouseEvent.cursorMove)
+            // document.addEventListener("click", MouseEvent.leftClick)
+            // document.addEventListener("contextmenu", MouseEvent.rightClick)
 
             console.log("After swap")
 

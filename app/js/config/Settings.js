@@ -73,12 +73,6 @@ var Specs = {
     fadingSpeed: 4.75,
     fallingSpeed: 10,
 
-    BlockPositionChange: new BlockChange(),
-    AnimateBlock: new BlockAnimations(),
-    LineCheck: new LineMatch(),
-    MouseEvent: new MouseEvents(),
-    
-
     BrickC: null,
     Brick: null,
 
@@ -113,6 +107,8 @@ var Specs = {
     isLineMatched: false,
     isEveryLineChecked: true,
     isReadyToStart: false,
+    isReadyToClick: false,
+    isForWin: false,
 
     playerPoints: 0,
     comboMultipler: 0,

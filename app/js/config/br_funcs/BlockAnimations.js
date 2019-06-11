@@ -26,9 +26,9 @@ class BlockAnimations {
                 if (scale.x == Specs.scale - 12 && scale.y == Specs.scale - 12 && scale.z == Specs.scale - 12) {
                     cancelAnimationFrame(request)
                     Specs.blocksToInsert = []
-                    document.addEventListener("mousemove", Specs.MouseEvent.cursorMove)
-                    document.addEventListener("click", Specs.MouseEvent.leftClick)
-                    document.addEventListener("contextmenu", Specs.MouseEvent.rightClick)
+                    document.addEventListener("mousemove", MouseEvent.cursorMove)
+                    document.addEventListener("click", MouseEvent.leftClick)
+                    document.addEventListener("contextmenu", MouseEvent.rightClick)
                     Specs.isSwapPossible = false
                     Specs.isSwapped = 0
                     Specs.currentBlockModel = null
@@ -48,8 +48,8 @@ class BlockAnimations {
                     for (let i = 2; i < Specs.scene.children.length; i++)
                         if (Specs.getBRBoardPosition(Specs.scene.children[i].position) != Specs.scene.children[i].name[5])
                             console.log(Specs.scene.children[i].name[5], Specs.getBRBoardPosition(Specs.scene.children[i].position))
-                    if (whichChange) Specs.BlockPositionChange.changeHorizontal()
-                    else Specs.BlockPositionChange.changeVertical()
+                    if (whichChange) BlockPositionChange.changeHorizontal()
+                    else BlockPositionChange.changeVertical()
 
                 }
             }

@@ -1,6 +1,7 @@
 class GameBR {
     constructor(brickType = "normic_brick") {
         Specs.brickType = brickType
+        this.timestamp = 0
 
         Specs.BRBoard = JSON.parse(JSON.stringify(Specs.BRTable, null, 4))
         this.BRUI = new BRUI(),
@@ -34,7 +35,7 @@ class GameBR {
                 }
             console.log(JSON.stringify(Specs.BRBoard, null, ""));
             // setTimeout()
-            Specs.BlockPositionChange.changeHorizontal()
+            BlockPositionChange.changeHorizontal()
         })
 
         this.renderer = new THREE.WebGLRenderer({ alpha: true })
@@ -61,60 +62,68 @@ class GameBR {
         Specs.orthoCamera.updateProjectionMatrix()
         console.log(Specs.scene);
         const render = () => {
-            if (Specs.isReadyToStart) {
-                requestAnimationFrame(render)
-                var aspect = window.innerWidth / window.innerHeight;
-                // console.log(aspect);
+            requestAnimationFrame(render)
+            var aspect = window.innerWidth / window.innerHeight;
+            // console.log(aspect);
 
-                Specs.orthoCamera.left = -window.innerWidth / aspect;
-                Specs.orthoCamera.right = window.innerWidth / aspect;
-                Specs.orthoCamera.top = window.innerHeight / aspect;
-                Specs.orthoCamera.bottom = -window.innerHeight / aspect;
-                Specs.orthoCamera.updateProjectionMatrix();
-                this.renderer.setSize(window.innerWidth, window.innerHeight);
-                // this.renderer.render(Specs.scene, Specs.orthoCamera);
+            Specs.orthoCamera.left = -window.innerWidth / aspect;
+            Specs.orthoCamera.right = window.innerWidth / aspect;
+            Specs.orthoCamera.top = window.innerHeight / aspect;
+            Specs.orthoCamera.bottom = -window.innerHeight / aspect;
+            Specs.orthoCamera.updateProjectionMatrix();
+            this.renderer.setSize(window.innerWidth, window.innerHeight);
+            // this.renderer.render(Specs.scene, Specs.orthoCamera);
+            if (Specs.isReadyToStart)
                 this.renderer.render(Specs.scene, Specs.orthoCamera);
 
-                if (Specs.isSwapPossible) {
-                    // console.log(Specs.currentBlockClicked);
-                    // console.log(Specs.nextBlockClicked);
-                    if (Specs.isSwapped < 2) {
-                        Specs.BlockPositionChange.swapBlocks()
-                    }
-
-                    if (Specs.isSwapped == 2) {
-
-                        // Specs.BlockPositionChange.changeVertical()
-                        Specs.BlockPositionChange.changeHorizontal()
-
-                        if (Specs.isLineMatchChecked) {
-                            Specs.BlockPositionChange.swapBlocksBack()
-                        }
-
-                        // console.log(Specs.currentBlockModel.position);
-                        // console.log(Specs.nextBlockModel.position);
-                    }
-
+            if (Specs.isSwapPossible) {
+                // console.log(Specs.currentBlockClicked);
+                // console.log(Specs.nextBlockClicked);
+                if (Specs.isSwapped < 2) {
+                    BlockPositionChange.swapBlocks()
                 }
+
+                if (Specs.isSwapped == 2) {
+
+                    // BlockPositionChange.changeVertical()
+                    BlockPositionChange.changeHorizontal()
+
+                    if (Specs.isLineMatchChecked) {
+                        BlockPositionChange.swapBlocksBack()
+                    }
+
+                    // console.log(Specs.currentBlockModel.position);
+                    // console.log(Specs.nextBlockModel.position);
+                }
+
+            }
+            if (Specs.isForWin) {
+                if (this.timestamp == 60) {
+                    document.getElementById("timeNumber").innerText = (parseInt(document.getElementById("timeNumber").innerText) - 1)
+                    this.timestamp = 0
+                }
+                else this.timestamp++
             }
         }
         render()
 
         this.cursorMove = (e) => {
-            Specs.MouseEvent.cursorMove(e)
+            MouseEvent.cursorMove(e)
         }
 
         this.leftClick = (e) => {
-            Specs.MouseEvent.leftClick(e)
+            MouseEvent.leftClick(e)
         }
 
         this.rightClick = (e) => {
-            Specs.MouseEvent.rightClick(e)
+            MouseEvent.rightClick(e)
         }
-
-        document.addEventListener("mousemove", Specs.MouseEvent.cursorMove)
-        document.addEventListener("click", Specs.MouseEvent.leftClick)
-        document.addEventListener("contextmenu", Specs.MouseEvent.rightClick)
+        // if (Specs.isReadyToClick) {
+        //     document.addEventListener("mousemove", MouseEvent.cursorMove)
+        //     document.addEventListener("click", MouseEvent.leftClick)
+        //     document.addEventListener("contextmenu", MouseEvent.rightClick)
+        //     Specs.isReadyToClick = false
+        // }
     }
 
 }

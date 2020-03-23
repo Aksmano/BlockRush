@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../lib/jquery331.js"></script>
+    <script src="../lib/three.js"></script>
+    <script src="../lib/three_ver97.js"></script>
+    <script src="../lib/OrbitControls.js"></script>
+    <script src="../lib/GLTFLoader.js"></script>
+    <script src="../js/config/br_funcs/MouseEvents.js"></script>
+    <script src="../js/config/br_funcs/LineCheck.js"></script>
+    <script src="../js/config/br_funcs/BlockAnimations.js"></script>
+    <script src="../js/config/br_funcs/BlockChange.js"></script>
+    <script src="../js/config/Settings.js"></script>
+    <script src="../js/assets/Brick.js"></script>
+    <script src="../js/config/br_funcs/BRUI.js"></script>
+    <script src="../js/bin/block_rush/GameBR.js"></script>
+    <script src="../js/bin/block_rush/MainBR.js"></script>
+    <title>Block Rush</title>
+</head>
+
+<body>
+    <div id="configuration">
+        Your time<br>
+        (in seconds 60-600): <input type="number" id="pTime" minlength="60" maxlength="600" value="60">
+        Points to win<br>
+        (5000-100000): <input type="number" id="pPoints" minlength="5000" maxlength="100000" value="5000">
+        <input type="button" value="Play for win" id="pfw">
+        <input type="button" value="Play for fun" id="pff">
+    </div>
+    <div id="menu">
+        <div id="points">Your points: <span id="pointsNumber"></span></div>
+        <div id="multipler">Your points multipler: <span id="multiplerNumber"></span></div>
+        <div id="time">Your time to end: <span id="timeNumber"></span></div>
+        <div id="winpoints">Points to win: <span id="winpointsNumber"></span></div>
+    </div>
+    <div id="root"></div>
+    <div id="backg"></div>
+
+</body>
+
+</html>

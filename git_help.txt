@@ -1,0 +1,24 @@
+Obs³uga git w du¿ym skrócie
+
+
+
+Dla windows git najpierw trzeba pobraæ, link: https://git-scm.com/download/win
+
+W Linuxie git powinien byæ zainstalowany, a jeœli nie to wklej polecenie sudo apt install git
+
+
+Tworzenie lokalnego repozytorium
+
+- utworz folder
+- otwórz git Bash (windows) lub otworz terminal (linux)
+- wejdz do utworzonego folderu
+- utworz lokalne repozytorium poleceniem git init
+- nastepnie dodaj zdalne repozytorium poleceniem git remote add origin https://gitlab.com/Aksmano/threetris-3d
+- teraz nale¿y pobrac aktualne pliki z serwera za poleceniem git pull origin master
+
+
+Dodawanie nowych plików
+
+- w glownym folderze rozpocznij œledzenie nowych plików/ich nowych zawartoœci polecenim git add *
+- nastêpnie utwórz zatwierdzenie zmian razem z komentarzem polecenim git commit -m "Treœæ komentarza" (fajnie by bylo jakby te komentarze odnosily sie do zmian np "dodanie opcji zmiany kamery w pliku dupsko.js")
+- teraz trzeba tylko dodaæ zmiany do repozytorium zdalnego poleceniem git push -u origin master

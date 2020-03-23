@@ -1,0 +1,66 @@
+body{
+    margin: 0;
+    overflow: hidden;
+    background: black;
+    color:white;
+    width: 100%;
+    height: 100%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+html{
+
+}
+
+#configuration{
+    position: absolute;
+    left: 35%;
+    top: 35%;
+    padding: 30px 70px;
+    height: auto;
+    width: auto;
+    border: 5px solid black;
+    border-radius: 2px;
+    background: darkslategray;
+}
+
+input[type="button"]{
+    border-radius: 2px;
+    border:2px solid gray;
+}
+
+#pTime, #pPoints{
+    display: block;
+    margin-bottom: 10px;
+}
+
+#backg{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #444444;
+    font-size: 40px;
+    text-align: center;
+    /* background-image: url(../img/br_img/photo1.png); */
+}
+
+h1, select{
+    position: absolute;
+    display: block;
+    margin-top:50px;
+}
+
+#menu{
+    position: absolute;
+    /* border-right: 3px solid black; */
+    width: 15%;
+    height: 100%;
+}
+
+#points, #multipler, #time, #winpoints{
+    margin: 5px;
+    padding: 5px;
+    height: auto;
+    width: 70%;
+    border: 3px solid white;
+}
